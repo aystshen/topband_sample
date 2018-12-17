@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ayst.sample.MainActivity">
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_root_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="root测试" />
+
+        <Button
+            android:id="@+id/btn_silent_install"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="静默安装" />
+
+        <Button
+            android:id="@+id/btn_reboot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5秒重启" />
+
+        <Button
+            android:id="@+id/btn_start_app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5秒启动设置" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ToggleButton
+            android:id="@+id/btn_gpio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="关锁"
+            android:textOff="开锁"/>
+
+        <ToggleButton
+            android:id="@+id/btn_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="关闭相机"
+            android:textOff="打开相机"/>
+
+        <ToggleButton
+            android:id="@+id/btn_sensor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="有人"
+            android:textOff="无人"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_camera"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+</LinearLayout>
