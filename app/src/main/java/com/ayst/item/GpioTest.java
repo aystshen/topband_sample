@@ -18,7 +18,7 @@ public class GpioTest {
 
     /**
      * GPIO write
-     * @param gpio 0,1,2,3,4,5,6
+     * @param gpio 0~Number
      * @param value 0: Low 1: High
      */
     public void gpioWrite(int gpio, int value) {
@@ -29,7 +29,7 @@ public class GpioTest {
 
     /**
      * GPIO read
-     * @param gpio 0,1,2,3,4,5,6
+     * @param gpio 0~Number
      * @return 0: Low 1: High other：error
      */
     public int gpioRead(int gpio) {
@@ -41,7 +41,7 @@ public class GpioTest {
 
     /**
      * GPIO direction
-     * @param gpio 0,1,2,3,4,5,6
+     * @param gpio 0~Number
      * @param direction 0: input 1: output
      * @param value 0: Low 1: High
      */
@@ -53,7 +53,7 @@ public class GpioTest {
 
     /**
      * GPIO register key event
-     * @param gpio 0,1,2,3,4,5,6
+     * @param gpio 0~Number
      */
     public void gpioRegKeyEvent(int gpio) {
         if (null != mGpioService) {
@@ -63,7 +63,7 @@ public class GpioTest {
 
     /**
      * GPIO unregister key event
-     * @param gpio 0,1,2,3,4,5,6
+     * @param gpio 0~Number
      */
     public void gpioUnregKeyEvent(int gpio) {
         if (null != mGpioService) {
@@ -73,7 +73,7 @@ public class GpioTest {
 
     /**
      * Get GPIO number
-     * @return -1: error other: GPIO number
+     * @return <0: error other: GPIO number
      */
     public int gpioGetNumber() {
         if (null != mGpioService) {
