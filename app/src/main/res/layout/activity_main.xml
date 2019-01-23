@@ -45,13 +45,6 @@
         android:orientation="horizontal">
 
         <ToggleButton
-            android:id="@+id/btn_gpio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textOn="关锁"
-            android:textOff="开锁"/>
-
-        <ToggleButton
             android:id="@+id/btn_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,6 +57,52 @@
             android:layout_height="wrap_content"
             android:textOn="有人"
             android:textOff="无人"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ToggleButton
+            android:id="@+id/btn_gpio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="100dp"
+            android:textOn="GPIO-LOW"
+            android:textOff="GPIO-HIGHT"/>
+
+        <Spinner
+            android:id="@+id/spn_gpio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rdo_gpio_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="输入"/>
+
+            <RadioButton
+                android:id="@+id/rdo_gpio_output"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="输出"/>
+
+            <RadioButton
+                android:id="@+id/rdo_gpio_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="KEY"/>
+
+        </RadioGroup>
 
     </LinearLayout>
 
