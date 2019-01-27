@@ -13,13 +13,17 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.ayst.item.CameraTest;
 import com.ayst.item.GpioTest;
+import com.ayst.item.McuTest;
 import com.ayst.item.ShellTest;
 import com.ayst.item.SilentInstall;
 import com.ayst.item.SystemAction;
+import com.ayst.item.TimingPowerTest;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +57,26 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     RadioButton mGpioOutputRdo;
     @BindView(R.id.rdo_gpio_key)
     RadioButton mGpioKeyRdo;
+    @BindView(R.id.btn_switch_watchdog)
+    ToggleButton mWatchdogBtn;
+    @BindView(R.id.btn_set_watchdog_time)
+    Button mSetWatchdogDurationBtn;
+    @BindView(R.id.btn_heartbeat)
+    Button mHeartbeatBtn;
+    @BindView(R.id.btn_set_power_on_time)
+    ToggleButton mTimingPowerOnBtn;
+    @BindView(R.id.btn_set_power_off_time)
+    ToggleButton mTimingPowerOffBtn;
+    @BindView(R.id.btn_set_reboot)
+    ToggleButton mTimingRebootBtn;
+    @BindView(R.id.tv_watchdog_time)
+    TextView mWatchdogTimeTv;
+    @BindView(R.id.tv_power_on_time)
+    TextView mPowerOnTimeTv;
+    @BindView(R.id.tv_power_off_time)
+    TextView mPowerOffTimeTv;
+    @BindView(R.id.tv_reboot_time)
+    TextView mRebootTimeTv;
 
     private boolean isSensorActive = false;
     private int mCurGpio = -1;
@@ -68,8 +92,16 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             KeyEvent.KEYCODE_GPIO_8,
             KeyEvent.KEYCODE_GPIO_9};
 
+    private static final int TYPE_POWER_ON = 0;
+    private static final int TYPE_POWER_OFF = 1;
+    private static final int TYPE_REBOOT = 2;
+    private static final int TYPE_WATCHDOG = 3;
+    private int mTimePickerType = TYPE_POWER_ON;
+
     private GpioTest mGpioTest;
+    private McuTest mMcuTest;
     private CameraTest mCameraTest;
+    private TimingPowerTest mTimingPowerTest;
 
     private Handler mHandler;
 
@@ -82,9 +114,23 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
         mHandler = new Handler(getMainLooper());
         mGpioTest = new GpioTest(this);
+        mMcuTest = new McuTest(this);
         mCameraTest = new CameraTest(this, mCameraLayout);
+        mTimingPowerTest = new TimingPowerTest(this);
 
         initView();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mTimingPowerTest.registerReceiver();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mTimingPowerTest.unRegisterReceiver();
     }
 
     private void initView() {
@@ -127,9 +173,57 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         } else {
             mGpioBtn.setEnabled(false);
         }
+
+        mWatchdogBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mMcuTest.openWatchdog();
+                } else {
+                    mMcuTest.closeWatchdog();
+                }
+            }
+        });
+
+        mTimingPowerOnBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    showTimePikerDialog(TYPE_POWER_ON);
+                } else {
+                    mPowerOnTimeTv.setText("");
+                    mTimingPowerTest.setUptime(0);
+                }
+            }
+        });
+
+        mTimingPowerOffBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    showTimePikerDialog(TYPE_POWER_OFF);
+                } else {
+                    mPowerOffTimeTv.setText("");
+                    mTimingPowerTest.stopAlarm(TimingPowerTest.ACTION_TIMED_POWEROFF);
+                }
+            }
+        });
+
+        mTimingRebootBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    showTimePikerDialog(TYPE_REBOOT);
+                } else {
+                    mRebootTimeTv.setText("");
+                    mTimingPowerTest.stopAlarm(TimingPowerTest.ACTION_TIMED_REBOOT);
+                }
+            }
+        });
     }
 
-    @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_start_app, R.id.btn_gpio})
+    @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_start_app,
+            R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_root_test:
@@ -151,6 +245,12 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 } else {
                     mGpioBtn.setChecked(!mGpioBtn.isChecked());
                 }
+                break;
+            case R.id.btn_set_watchdog_time:
+                showTimePikerDialog(TYPE_WATCHDOG);
+                break;
+            case R.id.btn_heartbeat:
+                mMcuTest.heartbeat();
                 break;
         }
     }
@@ -199,5 +299,29 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                     break;
             }
         }
+    }
+
+    private void showTimePikerDialog(final int type) {
+        TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+                String showStr = String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute) + ":" + String.format("%02d", second);
+                if (TYPE_POWER_ON == type) {
+                    mPowerOnTimeTv.setText(showStr);
+                    mTimingPowerTest.startAlarm(TimingPowerTest.ACTION_TIMED_POWERON, hourOfDay, minute, second);
+                } else if (TYPE_POWER_OFF == type) {
+                    mPowerOffTimeTv.setText(showStr);
+                    mTimingPowerTest.startAlarm(TimingPowerTest.ACTION_TIMED_POWEROFF, hourOfDay, minute, second);
+                } else if (TYPE_REBOOT == type) {
+                    mRebootTimeTv.setText(showStr);
+                    mTimingPowerTest.startAlarm(TimingPowerTest.ACTION_TIMED_REBOOT, hourOfDay, minute, second);
+                } else if (TYPE_WATCHDOG == type) {
+                    mWatchdogTimeTv.setText(showStr);
+                    int seconds = hourOfDay * 3600 + minute * 60 + second;
+                    mMcuTest.setWatchdogDuration(seconds);
+                }
+            }
+        }, true);
+        tpd.show(getFragmentManager(), "timepickerdialog");
     }
 }
