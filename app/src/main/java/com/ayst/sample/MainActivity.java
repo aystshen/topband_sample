@@ -1,8 +1,13 @@
 package com.ayst.sample;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -10,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -95,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
     private static final int TYPE_REBOOT = 2;
-    private static final int TYPE_WATCHDOG = 3;
     private int mTimePickerType = TYPE_POWER_ON;
 
     private GpioTest mGpioTest;
@@ -247,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 }
                 break;
             case R.id.btn_set_watchdog_time:
-                showTimePikerDialog(TYPE_WATCHDOG);
+                showWatchdogDurationPickerDialog();
                 break;
             case R.id.btn_heartbeat:
                 mMcuTest.heartbeat();
@@ -315,13 +320,30 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 } else if (TYPE_REBOOT == type) {
                     mRebootTimeTv.setText(showStr);
                     mTimingPowerTest.startAlarm(TimingPowerTest.ACTION_TIMED_REBOOT, hourOfDay, minute, second);
-                } else if (TYPE_WATCHDOG == type) {
-                    mWatchdogTimeTv.setText(showStr);
-                    int seconds = hourOfDay * 3600 + minute * 60 + second;
-                    mMcuTest.setWatchdogDuration(seconds);
                 }
             }
         }, true);
         tpd.show(getFragmentManager(), "timepickerdialog");
+    }
+
+    private void showWatchdogDurationPickerDialog() {
+        final EditText editText = new EditText(this);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("设置看门狗超时（单位：秒）");
+        builder.setView(editText);
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String str = editText.getText().toString();
+                if (!TextUtils.isEmpty(str)) {
+                    mWatchdogTimeTv.setText(str);
+                    mMcuTest.setWatchdogDuration(Integer.parseInt(str));
+                }
+                dialog.dismiss();
+            }
+        });
+        final Dialog dialog = builder.create();
+        dialog.show();
     }
 }

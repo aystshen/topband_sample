@@ -71,7 +71,7 @@ public class TimingPowerTest {
                     + String.format("%02d", minute) + ":"
                     + String.format("%02d", second));
 
-            alarmMillis = System.currentTimeMillis() + differMillis;
+            alarmMillis = differMillis;
         } else {
             Log.i(TAG, "setAlarm, action: " + action + ", " +
                     "tomorrow->" +
@@ -79,13 +79,13 @@ public class TimingPowerTest {
                     + String.format("%02d", minute) + ":"
                     + String.format("%02d", second));
 
-            alarmMillis = System.currentTimeMillis() + differMillis + MILLIS_OF_DAY;
+            alarmMillis = differMillis + MILLIS_OF_DAY;
         }
 
         if (TextUtils.equals(ACTION_TIMED_POWERON, action)) {
             setUptime((int) (alarmMillis / 1000));
         } else {
-            setAlarm(action, alarmMillis);
+            setAlarm(action, alarmMillis + System.currentTimeMillis());
         }
     }
 
