@@ -55,8 +55,6 @@ android {
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //compileOnly files('libs/classes-rk3128.jar')
-    compileOnly files('libs/classes-rk3288.jar')
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'

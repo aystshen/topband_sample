@@ -2,82 +2,123 @@ package com.ayst.item;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.SystemGpio;
+import android.os.IBinder;
+import android.os.IGpioService;
+import android.os.RemoteException;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by Administrator on 2018/11/6.
  */
 
 public class GpioTest {
-    private SystemGpio mGpioService;
+    private IGpioService mGpioService;
 
     @SuppressLint("WrongConstant")
     public GpioTest(Context context) {
-        mGpioService = (SystemGpio) context.getSystemService("gpio");
+        Method method = null;
+        try {
+            method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
+            IBinder binder = (IBinder) method.invoke(null, new Object[]{"gpio"});
+            mGpioService = IGpioService.Stub.asInterface(binder);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * GPIO write
-     * @param gpio 0~Number
+     *
+     * @param gpio  0~Number
      * @param value 0: Low 1: High
      */
     public void gpioWrite(int gpio, int value) {
         if (null != mGpioService) {
-            mGpioService.gpioWrite(gpio, value);
+            try {
+                mGpioService.gpioWrite(gpio, value);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * GPIO read
+     *
      * @param gpio 0~Number
      * @return 0: Low 1: High other：error
      */
     public int gpioRead(int gpio) {
         if (null != mGpioService) {
-            return mGpioService.gpioRead(gpio);
+            try {
+                return mGpioService.gpioRead(gpio);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }
 
     /**
      * GPIO direction
-     * @param gpio 0~Number
+     *
+     * @param gpio      0~Number
      * @param direction 0: input 1: output
-     * @param value 0: Low 1: High
+     * @param value     0: Low 1: High
      */
     public void gpioDirection(int gpio, int direction, int value) {
         if (null != mGpioService) {
-            mGpioService.gpioDirection(gpio, direction, value);
+            try {
+                mGpioService.gpioDirection(gpio, direction, value);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * GPIO register key event
+     *
      * @param gpio 0~Number
      */
     public void gpioRegKeyEvent(int gpio) {
         if (null != mGpioService) {
-            mGpioService.gpioRegKeyEvent(gpio);
+            try {
+                mGpioService.gpioRegKeyEvent(gpio);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * GPIO unregister key event
+     *
      * @param gpio 0~Number
      */
     public void gpioUnregKeyEvent(int gpio) {
         if (null != mGpioService) {
-            mGpioService.gpioUnregKeyEvent(gpio);
+            try {
+                mGpioService.gpioUnregKeyEvent(gpio);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
      * Get GPIO number
+     *
      * @return <0: error other: GPIO number
      */
     public int gpioGetNumber() {
         if (null != mGpioService) {
-            return mGpioService.gpioGetNumber();
+            try {
+                return mGpioService.gpioGetNumber();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }

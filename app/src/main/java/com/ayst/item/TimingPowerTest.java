@@ -7,10 +7,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.SystemMcu;
+import android.os.IBinder;
+import android.os.IMcuService;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.lang.reflect.Method;
 import java.util.Calendar;
 
 /**
@@ -27,13 +30,20 @@ public class TimingPowerTest {
     public static final String ACTION_TIMED_REBOOT = "com.ayst.sample.timed_reboot";
 
     private Context mContext;
-    private SystemMcu mMcuService;
+    private IMcuService mMcuService;
     private AlarmManager mAlarmManager;
 
     @SuppressLint("WrongConstant")
     public TimingPowerTest(Context context) {
         mContext = context;
-        mMcuService = (SystemMcu) context.getSystemService("mcu");
+        Method method = null;
+        try {
+            method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
+            IBinder binder = (IBinder) method.invoke(null, new Object[]{"mcu"});
+            mMcuService = IMcuService.Stub.asInterface(binder);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void registerReceiver() {
@@ -118,7 +128,11 @@ public class TimingPowerTest {
      */
     public int setUptime(int time) {
         if (null != mMcuService) {
-            return mMcuService.setUptime(time);
+            try {
+                return mMcuService.setUptime(time);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }

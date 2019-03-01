@@ -2,18 +2,29 @@ package com.ayst.item;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.SystemMcu;
+import android.os.IBinder;
+import android.os.IMcuService;
+import android.os.RemoteException;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by Administrator on 2018/11/6.
  */
 
 public class McuTest {
-    private SystemMcu mMcuService;
+    private IMcuService mMcuService;
 
     @SuppressLint("WrongConstant")
     public McuTest(Context context) {
-        mMcuService = (SystemMcu) context.getSystemService("mcu");
+        Method method = null;
+        try {
+            method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
+            IBinder binder = (IBinder) method.invoke(null, new Object[]{"mcu"});
+            mMcuService = IMcuService.Stub.asInterface(binder);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -21,7 +32,11 @@ public class McuTest {
      */
     public void heartbeat() {
         if (null != mMcuService) {
-            mMcuService.heartbeat();
+            try {
+                mMcuService.heartbeat();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -32,7 +47,11 @@ public class McuTest {
      */
     public int setUptime(int time) {
         if (null != mMcuService) {
-            return mMcuService.setUptime(time);
+            try {
+                return mMcuService.setUptime(time);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }
@@ -43,7 +62,11 @@ public class McuTest {
      */
     public int openWatchdog() {
         if (null != mMcuService) {
-            return mMcuService.openWatchdog();
+            try {
+                return mMcuService.openWatchdog();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }
@@ -54,7 +77,11 @@ public class McuTest {
      */
     public int closeWatchdog() {
         if (null != mMcuService) {
-            return mMcuService.closeWatchdog();
+            try {
+                return mMcuService.closeWatchdog();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }
@@ -66,7 +93,11 @@ public class McuTest {
      */
     public int setWatchdogDuration(int duration) {
         if (null != mMcuService) {
-            return mMcuService.setWatchdogDuration(duration);
+            try {
+                return mMcuService.setWatchdogDuration(duration);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
         return -1;
     }
