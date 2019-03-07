@@ -87,16 +87,17 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private boolean isSensorActive = false;
     private int mCurGpio = -1;
     private static final int[] GPIO_KEY_CODE = {
-            KeyEvent.KEYCODE_GPIO_0,
-            KeyEvent.KEYCODE_GPIO_1,
-            KeyEvent.KEYCODE_GPIO_2,
-            KeyEvent.KEYCODE_GPIO_3,
-            KeyEvent.KEYCODE_GPIO_4,
-            KeyEvent.KEYCODE_GPIO_5,
-            KeyEvent.KEYCODE_GPIO_6,
-            KeyEvent.KEYCODE_GPIO_7,
-            KeyEvent.KEYCODE_GPIO_8,
-            KeyEvent.KEYCODE_GPIO_9};
+            275, //KeyEvent.KEYCODE_GPIO_0,
+            276, //KeyEvent.KEYCODE_GPIO_1,
+            277, //KeyEvent.KEYCODE_GPIO_2,
+            278, //KeyEvent.KEYCODE_GPIO_3,
+            279, //KeyEvent.KEYCODE_GPIO_4,
+            280, //KeyEvent.KEYCODE_GPIO_5,
+            281, //KeyEvent.KEYCODE_GPIO_6,
+            282, //KeyEvent.KEYCODE_GPIO_7,
+            283, //KeyEvent.KEYCODE_GPIO_8,
+            284  //KeyEvent.KEYCODE_GPIO_9
+        };
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -287,6 +288,15 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         }
     };
 
+    Runnable mReadGpioRunnable = new Runnable() {
+        @Override
+        public void run() {
+            int value = mGpioTest.gpioRead(mCurGpio);
+            mGpioBtn.setChecked(value > 0);
+            mHandler.postDelayed(this, 1000);
+        }
+    };
+
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         if (b) {
@@ -294,12 +304,16 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 case R.id.rdo_gpio_input:
                     mGpioTest.gpioUnregKeyEvent(mCurGpio);
                     mGpioTest.gpioDirection(mCurGpio, 0, 1);
+                    mHandler.removeCallbacks(mReadGpioRunnable);
+                    mHandler.postDelayed(mReadGpioRunnable, 1000);
                     break;
                 case R.id.rdo_gpio_output:
+                    mHandler.removeCallbacks(mReadGpioRunnable);
                     mGpioTest.gpioUnregKeyEvent(mCurGpio);
                     mGpioTest.gpioDirection(mCurGpio, 1, 0);
                     break;
                 case R.id.rdo_gpio_key:
+                    mHandler.removeCallbacks(mReadGpioRunnable);
                     mGpioTest.gpioRegKeyEvent(mCurGpio);
                     break;
             }
