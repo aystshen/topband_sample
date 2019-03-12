@@ -103,7 +103,7 @@ public class CameraTest {
 
                         }
                     });
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(200, 200);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(480, 320);
                     mLayout.addView(surface, layoutParams);
                 }
             }
