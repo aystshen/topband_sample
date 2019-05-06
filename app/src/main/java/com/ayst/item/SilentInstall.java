@@ -17,7 +17,7 @@ public class SilentInstall {
     private static final String TAG = "SilentInstall";
 
     /**
-     * 执行具体的静默安装逻辑，需要root权限。
+     * 执行具体的静默安装逻辑，不需要root权限。
      *
      * @param apkPath 要安装的apk文件的路径
      * @return 安装成功返回true，安装失败返回false。

@@ -13,6 +13,8 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ayst.utils.AppUtil;
+
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
@@ -137,30 +139,15 @@ public class TimingPowerTest {
         return -1;
     }
 
-    private void reboot() {
-        Intent intent = new Intent(Intent.ACTION_REBOOT);
-        intent.putExtra("nowait", 1);
-        intent.putExtra("interval", 1);
-        intent.putExtra("window", 0);
-        mContext.sendBroadcast(intent);
-    }
-
-    private void powerOff() {
-        Intent intent = new Intent("com.android.internal.intent.action.REQUEST_SHUTDOWN");
-        intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        mContext.startActivity(intent);
-    }
-
     private BroadcastReceiver mAlarmReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             Log.i(TAG, "Alarm receiver action: " + action);
             if (TextUtils.equals(ACTION_TIMED_POWEROFF, action)) {
-                powerOff();
+                AppUtil.powerOff(mContext);
             } else if (TextUtils.equals(ACTION_TIMED_REBOOT, action)) {
-                reboot();
+                AppUtil.reboot(mContext);
             }
         }
     };

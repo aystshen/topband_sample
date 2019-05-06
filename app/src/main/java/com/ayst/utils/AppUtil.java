@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
@@ -381,5 +382,20 @@ public class AppUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void reboot(Context context) {
+        Intent intent = new Intent(Intent.ACTION_REBOOT);
+        intent.putExtra("nowait", 1);
+        intent.putExtra("interval", 1);
+        intent.putExtra("window", 0);
+        context.sendBroadcast(intent);
+    }
+
+    public static void powerOff(Context context) {
+        Intent intent = new Intent("com.android.internal.intent.action.REQUEST_SHUTDOWN");
+        intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

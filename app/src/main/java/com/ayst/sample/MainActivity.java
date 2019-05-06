@@ -29,6 +29,7 @@ import com.ayst.item.ShellTest;
 import com.ayst.item.SilentInstall;
 import com.ayst.item.SystemAction;
 import com.ayst.item.TimingPowerTest;
+import com.ayst.utils.AppUtil;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import butterknife.BindView;
@@ -45,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     Button mSilentInstallBtn;
     @BindView(R.id.btn_reboot)
     Button mRebootBtn;
-    @BindView(R.id.btn_start_app)
-    Button mStartAppBtn;
+    @BindView(R.id.btn_shutdown)
+    Button mShutdownBtn;
     @BindView(R.id.btn_gpio)
     ToggleButton mGpioBtn;
     @BindView(R.id.btn_sensor)
@@ -228,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         });
     }
 
-    @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_start_app,
+    @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -239,10 +240,10 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 SilentInstall.install(this, "");
                 break;
             case R.id.btn_reboot:
-                SystemAction.reboot(this, 5000);
+                AppUtil.reboot(this);
                 break;
-            case R.id.btn_start_app:
-                SystemAction.startApp(this, "com.android.settings", 5000);
+            case R.id.btn_shutdown:
+                AppUtil.powerOff(this);
                 break;
             case R.id.btn_gpio:
                 Log.i(TAG, "onViewClicked, btn_gpio");

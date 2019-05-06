@@ -50,13 +50,13 @@
                         android:id="@+id/btn_reboot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5秒重启" />
+                        android:text="重启" />
 
                     <Button
-                        android:id="@+id/btn_start_app"
+                        android:id="@+id/btn_shutdown"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5秒启动设置" />
+                        android:text="关机" />
                 </LinearLayout>
 
                 <LinearLayout
