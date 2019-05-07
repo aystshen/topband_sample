@@ -72,6 +72,9 @@ dependencies {
 
     // TimePicker
     implementation 'com.wdullaer:materialdatetimepicker:3.5.1'
+
+    // FlexboxLayout
+    implementation 'com.google.android:flexbox:1.0.0'
 }
 
 preBuild {

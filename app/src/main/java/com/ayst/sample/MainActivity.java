@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_flexbox);
         ButterKnife.bind(this);
 
         mHandler = new Handler(getMainLooper());
