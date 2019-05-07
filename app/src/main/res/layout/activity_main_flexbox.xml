@@ -99,8 +99,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minWidth="100dp"
-                    android:textOff="GPIO-HIGHT"
-                    android:textOn="GPIO-LOW" />
+                    android:textOff="LOW"
+                    android:textOn="HIGHT" />
 
                 <Spinner
                     android:id="@+id/spn_gpio"

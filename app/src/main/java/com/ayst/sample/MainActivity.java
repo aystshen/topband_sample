@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 if (b) {
                     showTimePikerDialog(TYPE_POWER_ON);
                 } else {
-                    mPowerOnTimeTv.setText("");
+                    mPowerOnTimeTv.setText("--:--");
                     mTimingPowerTest.setUptime(0);
                 }
             }
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 if (b) {
                     showTimePikerDialog(TYPE_POWER_OFF);
                 } else {
-                    mPowerOffTimeTv.setText("");
+                    mPowerOffTimeTv.setText("--:--");
                     mTimingPowerTest.stopAlarm(TimingPowerTest.ACTION_TIMED_POWEROFF);
                 }
             }
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 if (b) {
                     showTimePikerDialog(TYPE_REBOOT);
                 } else {
-                    mRebootTimeTv.setText("");
+                    mRebootTimeTv.setText("--:--");
                     mTimingPowerTest.stopAlarm(TimingPowerTest.ACTION_TIMED_REBOOT);
                 }
             }
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             case R.id.btn_gpio:
                 Log.i(TAG, "onViewClicked, btn_gpio");
                 if (mGpioOutputRdo.isChecked()) {
-                    mGpioTest.gpioWrite(mGpioSpn.getSelectedItemPosition(), mGpioBtn.isChecked() ? 0 : 1);
+                    mGpioTest.gpioWrite(mGpioSpn.getSelectedItemPosition(), mGpioBtn.isChecked() ? 1 : 0);
                 } else {
                     mGpioBtn.setChecked(!mGpioBtn.isChecked());
                 }
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 }
             }
         } else if (mCurGpio >= 0 && event.getKeyCode() == GPIO_KEY_CODE[mCurGpio]) {
-            mGpioBtn.setChecked(event.getAction() == KeyEvent.ACTION_DOWN);
+            mGpioBtn.setChecked(event.getAction() == KeyEvent.ACTION_UP);
         }
 
         return super.dispatchKeyEvent(event);
