@@ -1,9 +1,20 @@
 package com.ayst.sample;
 
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -20,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ayst.item.CameraTest;
@@ -27,10 +39,15 @@ import com.ayst.item.GpioTest;
 import com.ayst.item.McuTest;
 import com.ayst.item.ShellTest;
 import com.ayst.item.SilentInstall;
-import com.ayst.item.SystemAction;
 import com.ayst.item.TimingPowerTest;
+import com.ayst.usb.OnDataChangeListener;
+import com.ayst.usb.OnUsbConnectChangeListener;
+import com.ayst.usb.UsbTransferServer;
 import com.ayst.utils.AppUtil;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     TextView mPowerOffTimeTv;
     @BindView(R.id.tv_reboot_time)
     TextView mRebootTimeTv;
+    @BindView(R.id.spn_usb)
+    Spinner mUsbDeviceSpn;
+    @BindView(R.id.btn_listen_usb)
+    ToggleButton mListenUsbBtn;
+    @BindView(R.id.tv_usb_data)
+    TextView mUsbDataTv;
 
     private boolean isSensorActive = false;
     private int mCurGpio = -1;
@@ -98,19 +121,88 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             282, //KeyEvent.KEYCODE_GPIO_7,
             283, //KeyEvent.KEYCODE_GPIO_8,
             284  //KeyEvent.KEYCODE_GPIO_9
-        };
+    };
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
     private static final int TYPE_REBOOT = 2;
     private int mTimePickerType = TYPE_POWER_ON;
 
+    //Handler message
+    private final static int MSG_USB_DATA_UPDATE = 1001;
+
     private GpioTest mGpioTest;
     private McuTest mMcuTest;
     private CameraTest mCameraTest;
     private TimingPowerTest mTimingPowerTest;
 
-    private Handler mHandler;
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_USB_DATA_UPDATE:
+                    Bundle bundle = msg.getData();
+                    byte[] data = bundle.getByteArray("data");
+                    int len = bundle.getInt("len");
+
+                    break;
+            }
+        }
+    };
+
+    private UsbManager mUsbManager = null;
+    private ArrayAdapter<String> mUsbDevicesAdapter = null;
+    private ArrayList<UsbDevice> mUsbDevices = new ArrayList<>();
+    private UsbDevice mCurUsbDevice = null;
+    private UsbTransferServer mUsbService = null;
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "onServiceDisconnected");
+            mUsbService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "onServiceConnected");
+            mUsbService = ((UsbTransferServer.UsbBinder) service).getService();
+            initUsbServiceListener(mUsbService);
+        }
+    };
+
+    private void initUsbServiceListener(UsbTransferServer usbService) {
+        if (usbService != null) {
+            Log.d(TAG, "initUsbServiceListener...");
+            usbService.setOnDataChangeListener(new OnDataChangeListener() {
+                @Override
+                public void onDataChange(byte[] data, int len) {
+                    Message msg = mHandler.obtainMessage(MSG_USB_DATA_UPDATE);
+                    Bundle bundle = new Bundle();
+                    bundle.putByteArray("data", data);
+                    bundle.putInt("len", len);
+                    msg.setData(bundle);
+                    mHandler.sendMessage(msg);
+                }
+            });
+
+            usbService.setOnUsbConnectChangeListener(new OnUsbConnectChangeListener() {
+                @Override
+                public void onUsbConnectChange(int status) {
+                    switch (status) {
+                        case UsbTransferServer.CONNECTED:
+                            mUsbDataTv.setText("连接成功");
+                            break;
+                        case UsbTransferServer.DISCONNECTED:
+                            mUsbDataTv.setText("连接断开");
+                            break;
+                        case UsbTransferServer.CONNECT_FAIL:
+                            mUsbDataTv.setText("连接失败");
+                            break;
+                    }
+                }
+            });
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +211,23 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         setContentView(R.layout.activity_main_flexbox);
         ButterKnife.bind(this);
 
-        mHandler = new Handler(getMainLooper());
+        mUsbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+
         mGpioTest = new GpioTest(this);
         mMcuTest = new McuTest(this);
         mCameraTest = new CameraTest(this, mCameraLayout);
         mTimingPowerTest = new TimingPowerTest(this);
 
         initView();
+        getUsbDevices();
+
+        Intent intent = new Intent().setClass(this, UsbTransferServer.class);
+        bindService(intent, conn, Context.BIND_AUTO_CREATE);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        registerReceiver(mBroadcastReceiver, filter);
     }
 
     @Override
@@ -138,6 +240,13 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     protected void onStop() {
         super.onStop();
         mTimingPowerTest.unRegisterReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(conn);
+        unregisterReceiver(mBroadcastReceiver);
     }
 
     private void initView() {
@@ -227,14 +336,49 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 }
             }
         });
+
+        mUsbDevicesAdapter = new ArrayAdapter<>(this, R.layout.spinner_item);
+        mUsbDeviceSpn.setAdapter(mUsbDevicesAdapter);
+        mUsbDeviceSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position < mUsbDevices.size()) {
+                    mCurUsbDevice = mUsbDevices.get(position);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        mListenUsbBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (null != mUsbService && null != mCurUsbDevice) {
+                        mUsbService.preConnect(mCurUsbDevice);
+                    }
+                } else {
+                    if (null != mUsbService) {
+                        mUsbService.disconnect();
+                    }
+                }
+            }
+        });
     }
 
     @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
-            R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat})
+            R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_listen_usb})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_root_test:
-                ShellTest.rootTest();
+                if (ShellTest.rootTest()) {
+                    Toast.makeText(this, "ROOT成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "ROOT失败", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_silent_install:
                 SilentInstall.install(this, "");
@@ -361,4 +505,59 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         final Dialog dialog = builder.create();
         dialog.show();
     }
+
+    private void getUsbDevices() {
+        mUsbDevices.clear();
+        HashMap<String, UsbDevice> deviceList = mUsbManager.getDeviceList();
+        mUsbDevices.addAll(deviceList.values());
+
+        if (!mUsbDevices.isEmpty()) {
+            int curDeviceIndex = -1;
+            String[] spinnerItems = new String[mUsbDevices.size()];
+            for (int i = 0; i < mUsbDevices.size(); i++) {
+                UsbDevice device = mUsbDevices.get(i);
+                spinnerItems[i] = device.getManufacturerName()
+                        + " " + device.getProductName()
+                        + "(" + device.getProductId()
+                        + "/" + device.getVendorId() + ")";
+
+                if (null != mCurUsbDevice) {
+                    if (mCurUsbDevice.getProductId() == device.getProductId()
+                            && mCurUsbDevice.getVendorId() == device.getVendorId()) {
+                        curDeviceIndex = i;
+                    }
+                }
+
+                Log.d(TAG, "getUsbDevices, " + device.toString());
+            }
+            mUsbDevicesAdapter.clear();
+            mUsbDevicesAdapter.addAll(spinnerItems);
+            mUsbDevicesAdapter.notifyDataSetChanged();
+
+            if (curDeviceIndex < 0) {
+                mCurUsbDevice = mUsbDevices.get(0);
+                mUsbDeviceSpn.setSelection(0);
+            } else {
+                mUsbDeviceSpn.setSelection(curDeviceIndex);
+            }
+        } else {
+            mCurUsbDevice = null;
+        }
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public synchronized void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)
+                    || UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+
+                UsbDevice device = (UsbDevice) intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+                Log.d(TAG, "mBroadcastReceiver: usb device venderid=" + device.getVendorId() + "productid=" + device.getProductId());
+
+                getUsbDevices();
+            }
+        }
+    };
 }

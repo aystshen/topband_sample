@@ -11,9 +11,11 @@ import cn.trinea.android.common.util.ShellUtils;
 public class ShellTest {
     private static final String TAG = "ShellTest";
 
-    public static void rootTest() {
+    public static boolean rootTest() {
         ShellUtils.CommandResult result = ShellUtils.execCommand("ls -l", true);
 
         Log.i(TAG, "execute, success message: " + result.successMsg + ", error message: " + result.errorMsg);
+
+        return result.errorMsg.isEmpty();
     }
 }
