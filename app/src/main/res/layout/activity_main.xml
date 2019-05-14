@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="其它" />
+                android:text="Other" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -38,25 +38,25 @@
                         android:id="@+id/btn_root_test"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="root测试" />
+                        android:text="Root Test" />
 
                     <Button
                         android:id="@+id/btn_silent_install"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="静默安装" />
+                        android:text="Silent Installation" />
 
                     <Button
                         android:id="@+id/btn_reboot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="重启" />
+                        android:text="Reboot" />
 
                     <Button
                         android:id="@+id/btn_shutdown"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="关机" />
+                        android:text="Shutdown" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -69,15 +69,15 @@
                         android:id="@+id/btn_camera"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textOff="打开相机"
-                        android:textOn="关闭相机" />
+                        android:textOff="Open Camera"
+                        android:textOn="Close Camera" />
 
                     <ToggleButton
                         android:id="@+id/btn_sensor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textOff="无人"
-                        android:textOn="有人" />
+                        android:textOff="Far"
+                        android:textOn="Nearly" />
 
                 </LinearLayout>
 
@@ -128,19 +128,19 @@
                         android:id="@+id/rdo_gpio_input"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="输入" />
+                        android:text="Input" />
 
                     <RadioButton
                         android:id="@+id/rdo_gpio_output"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="输出" />
+                        android:text="Output" />
 
                     <RadioButton
                         android:id="@+id/rdo_gpio_key"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="KEY" />
+                        android:text="Key" />
 
                 </RadioGroup>
 
@@ -150,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="看门狗" />
+                android:text="Watchdog" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,20 +169,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="100dp"
-                        android:textOff="打开看门狗"
-                        android:textOn="关闭看门狗" />
+                        android:textOff="Open"
+                        android:textOn="Close" />
 
                     <Button
                         android:id="@+id/btn_set_watchdog_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="设置超时" />
+                        android:text="Set the timeout" />
 
                     <Button
                         android:id="@+id/btn_heartbeat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="发送心跳" />
+                        android:text="Send a heartbeat" />
 
                 </LinearLayout>
 
@@ -194,7 +194,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="超时时间："
+                        android:text="Timeout："
                         android:textColor="@color/black" />
 
                     <TextView
@@ -212,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="定时开关机" />
+                android:text="Timing Switcher" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -230,22 +230,22 @@
                         android:id="@+id/btn_set_power_on_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textOff="定时开机"
-                        android:textOn="定时开机" />
+                        android:textOff="Timing Boot"
+                        android:textOn="Timing Boot" />
 
                     <ToggleButton
                         android:id="@+id/btn_set_power_off_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textOff="定时关机"
-                        android:textOn="定时关机" />
+                        android:textOff="Timing Shutdown"
+                        android:textOn="Timing Shutdown" />
 
                     <ToggleButton
                         android:id="@+id/btn_set_reboot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textOff="定时重启"
-                        android:textOn="定时重启" />
+                        android:textOff="Timing Reboot"
+                        android:textOn="Timing Reboot" />
 
                 </LinearLayout>
 
@@ -257,7 +257,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="开机时间："
+                        android:text="Boot time:"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -271,7 +271,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:text="关机时间："
+                        android:text="Shutdown time:"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -285,7 +285,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:text="重启时间："
+                        android:text="Reboot time:"
                         android:textColor="@color/black" />
 
                     <TextView

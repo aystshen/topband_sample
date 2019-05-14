@@ -190,13 +190,13 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 public void onUsbConnectChange(int status) {
                     switch (status) {
                         case UsbTransferServer.CONNECTED:
-                            mUsbDataTv.setText("连接成功");
+                            mUsbDataTv.setText("Connected");
                             break;
                         case UsbTransferServer.DISCONNECTED:
-                            mUsbDataTv.setText("连接断开");
+                            mUsbDataTv.setText("Disconnect");
                             break;
                         case UsbTransferServer.CONNECT_FAIL:
-                            mUsbDataTv.setText("连接失败");
+                            mUsbDataTv.setText("Connect fail");
                             break;
                     }
                 }
@@ -375,9 +375,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         switch (view.getId()) {
             case R.id.btn_root_test:
                 if (ShellTest.rootTest()) {
-                    Toast.makeText(this, "ROOT成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "ROOT失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "fail", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btn_silent_install:
@@ -489,9 +489,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         final EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("设置看门狗超时（单位：秒）");
+        builder.setTitle("Set watchdog timeout (in seconds)");
         builder.setView(editText);
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String str = editText.getText().toString();
