@@ -9,6 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
@@ -107,6 +111,18 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     ToggleButton mListenUsbBtn;
     @BindView(R.id.tv_usb_data)
     TextView mUsbDataTv;
+    @BindView(R.id.tv_acc_x)
+    TextView mAccXTv;
+    @BindView(R.id.tv_acc_y)
+    TextView mAccYTv;
+    @BindView(R.id.tv_acc_z)
+    TextView mAccZTv;
+    @BindView(R.id.tv_gyro_x)
+    TextView mGyroXTv;
+    @BindView(R.id.tv_gyro_y)
+    TextView mGyroYTv;
+    @BindView(R.id.tv_gyro_z)
+    TextView mGyroZTv;
 
     private boolean isSensorActive = false;
     private int mCurGpio = -1;
@@ -135,6 +151,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private McuTest mMcuTest;
     private CameraTest mCameraTest;
     private TimingPowerTest mTimingPowerTest;
+    private SensorManager mSensorManager;
+    private SensorEventListener mAccSensorEventListener;
+    private SensorEventListener mGyroSensorEventListener;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -219,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         mTimingPowerTest = new TimingPowerTest(this);
 
         initView();
+        initSensors();
         getUsbDevices();
 
         Intent intent = new Intent().setClass(this, UsbTransferServer.class);
@@ -247,6 +267,10 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         super.onDestroy();
         unbindService(conn);
         unregisterReceiver(mBroadcastReceiver);
+        if (mSensorManager != null) {
+            mSensorManager.unregisterListener(mAccSensorEventListener);
+            mSensorManager.unregisterListener(mGyroSensorEventListener);
+        }
     }
 
     private void initView() {
@@ -369,6 +393,53 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         });
     }
 
+    private void initSensors() {
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (null != mSensorManager) {
+            Sensor accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (accSensor != null) {
+                mAccSensorEventListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+                        float x = event.values[0];
+                        float y = event.values[1];
+                        float z = event.values[2];
+                        mAccXTv.setText(x + "");
+                        mAccYTv.setText(y + "");
+                        mAccZTv.setText(z + "");
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+                mSensorManager.registerListener(mAccSensorEventListener, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+
+            Sensor gyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+            if (gyroSensor != null) {
+                mGyroSensorEventListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+                        float x = event.values[0];
+                        float y = event.values[1];
+                        float z = event.values[2];
+                        mGyroXTv.setText(x + "");
+                        mGyroYTv.setText(y + "");
+                        mGyroZTv.setText(z + "");
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+                mSensorManager.registerListener(mGyroSensorEventListener, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+        }
+    }
+
     @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_listen_usb})
     public void onViewClicked(View view) {
@@ -411,12 +482,12 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         Log.i(TAG, "dispatchKeyEvent, keyCode=" + event.getKeyCode() + " action=" + event.getAction());
         if (event.getKeyCode() == KeyEvent.KEYCODE_F10) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                mHandler.removeCallbacks(mSensorClose);
                 if (!isSensorActive) {
                     isSensorActive = true;
                     mSensorBtn.setChecked(true);
-                    mHandler.postDelayed(mSensorClose, 3000);
                 }
+                mHandler.removeCallbacks(mSensorClose);
+                mHandler.postDelayed(mSensorClose, 3000);
             }
         } else if (mCurGpio >= 0 && event.getKeyCode() == GPIO_KEY_CODE[mCurGpio]) {
             mGpioBtn.setChecked(event.getAction() == KeyEvent.ACTION_UP);
