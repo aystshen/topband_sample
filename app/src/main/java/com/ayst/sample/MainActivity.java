@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     TextView mGyroYTv;
     @BindView(R.id.tv_gyro_z)
     TextView mGyroZTv;
+    @BindView(R.id.tv_voltage)
+    TextView mVoltageTv;
 
     private boolean isSensorActive = false;
     private int mCurGpio = -1;
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private SensorManager mSensorManager;
     private SensorEventListener mAccSensorEventListener;
     private SensorEventListener mGyroSensorEventListener;
+    private SensorEventListener mAdcSensorEventListener;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -436,6 +439,23 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                     }
                 };
                 mSensorManager.registerListener(mGyroSensorEventListener, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+
+            Sensor adcSensor = mSensorManager.getDefaultSensor(26); // 26: Sensor.TYPE_ADC
+            if (adcSensor != null) {
+                mAdcSensorEventListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+                        float voltage = event.values[0];
+                        mVoltageTv.setText(voltage + "");
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+                mSensorManager.registerListener(mAdcSensorEventListener, adcSensor, SensorManager.SENSOR_DELAY_NORMAL);
             }
         }
     }
