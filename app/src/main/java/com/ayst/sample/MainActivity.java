@@ -41,6 +41,7 @@ import android.widget.ToggleButton;
 import com.ayst.item.CameraTest;
 import com.ayst.item.GpioTest;
 import com.ayst.item.McuTest;
+import com.ayst.item.ModemTest;
 import com.ayst.item.ShellTest;
 import com.ayst.item.SilentInstall;
 import com.ayst.item.TimingPowerTest;
@@ -125,6 +126,12 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     TextView mGyroZTv;
     @BindView(R.id.tv_voltage)
     TextView mVoltageTv;
+    @BindView(R.id.btn_modem_power)
+    ToggleButton mModemPowerBtn;
+    @BindView(R.id.btn_modem_wakeup)
+    ToggleButton mModemWakeupBtn;
+    @BindView(R.id.btn_modem_reset)
+    Button mModemResetBtn;
 
     private boolean isSensorActive = false;
     private int mCurGpio = -1;
@@ -151,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     private GpioTest mGpioTest;
     private McuTest mMcuTest;
+    private ModemTest mModemTest;
     private CameraTest mCameraTest;
     private TimingPowerTest mTimingPowerTest;
     private SensorManager mSensorManager;
@@ -237,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
         mGpioTest = new GpioTest(this);
         mMcuTest = new McuTest(this);
+        mModemTest = new ModemTest(this);
         mCameraTest = new CameraTest(this, mCameraLayout);
         mTimingPowerTest = new TimingPowerTest(this);
 
@@ -461,7 +470,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     }
 
     @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
-            R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_listen_usb})
+            R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_listen_usb,
+            R.id.btn_modem_reset})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_root_test:
@@ -493,6 +503,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 break;
             case R.id.btn_heartbeat:
                 mMcuTest.heartbeat();
+                break;
+            case R.id.btn_modem_reset:
+                mModemTest.reset();
                 break;
         }
     }
