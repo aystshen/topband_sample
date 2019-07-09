@@ -44,7 +44,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, IOtherView, ICameraView, ISensorView, IGpioView, IWatchdogView, IModemView, IUsbView {
+public class MainActivity extends AppCompatActivity implements
+        CompoundButton.OnCheckedChangeListener, IOtherView,
+        ICameraView, ISensorView, IGpioView, IWatchdogView,
+        IModemView, IUsbView {
     private static final String TAG = "Sample";
 
     @BindView(R.id.btn_root_test)
@@ -138,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main_flexbox);
         ButterKnife.bind(this);
 
