@@ -1,4 +1,4 @@
-package com.ayst.item;
+package com.ayst.sample.items.camera;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.LinearLayout;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,18 +16,18 @@ import java.util.List;
  * Created by Administrator on 2018/12/17.
  */
 
-public class CameraTest {
-    private static final String TAG = "CameraTest";
+public class CameraPresenter {
+    private static final String TAG = "CameraPresenter";
 
     private Context mContext;
-    private LinearLayout mLayout;
+    private ICameraView mCameraView;
     private Handler mHandler;
 
     private List<CameraItem> mCameras = new ArrayList<>();
 
-    public CameraTest(Context context, LinearLayout layout) {
+    public CameraPresenter(Context context, ICameraView view) {
         mContext = context;
-        mLayout = layout;
+        mCameraView = view;
         mHandler = new Handler(Looper.getMainLooper());
     }
 
@@ -75,15 +74,15 @@ public class CameraTest {
             cameraItem.release();
         }
         mCameras.clear();
-        mLayout.removeAllViews();
+        mCameraView.removeCameraView();
     }
 
-    Runnable mCameraRunnable = new Runnable() {
+    private Runnable mCameraRunnable = new Runnable() {
         @Override
         public void run() {
             int cameraNumber = Camera.getNumberOfCameras();
             Log.i(TAG, "Camera num: " + cameraNumber);
-            for (int i=mCameras.size(); i<cameraNumber; i++) {
+            for (int i = mCameras.size(); i < cameraNumber; i++) {
                 SurfaceView surface = new SurfaceView(mContext);
                 if (openCamera(i, surface)) {
                     final int cameraId = i;
@@ -103,8 +102,7 @@ public class CameraTest {
 
                         }
                     });
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(300, 225);
-                    mLayout.addView(surface, layoutParams);
+                    mCameraView.addCameraView(surface);
                 }
             }
 
@@ -112,12 +110,12 @@ public class CameraTest {
         }
     };
 
-    class CameraItem {
-        public int id;
-        public Camera camera;
-        public SurfaceView surface;
+    private class CameraItem {
+        private int id;
+        private Camera camera;
+        private SurfaceView surface;
 
-        public void release() {
+        private void release() {
             if (null != camera) {
                 Log.i(TAG, "Release camera, id:" + id);
                 camera.stopPreview();

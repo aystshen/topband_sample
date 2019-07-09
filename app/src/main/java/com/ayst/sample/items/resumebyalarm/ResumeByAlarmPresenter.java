@@ -1,29 +1,20 @@
-package com.ayst.item;
+package com.ayst.sample.items.resumebyalarm;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.IBinder;
-import android.os.IMcuService;
-import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.ayst.utils.AppUtil;
 
-import java.lang.reflect.Method;
 import java.util.Calendar;
 
-/**
- * Created by Administrator on 2019/1/25.
- */
-
-public class TimingPowerTest {
-    private static final String TAG = "TimingPowerTest";
+public class ResumeByAlarmPresenter {
+    private static final String TAG = "ResumeByAlarmPresenter";
 
     public static final long MILLIS_OF_DAY = (24 * 60 * 60 * 1000);
 
@@ -32,23 +23,15 @@ public class TimingPowerTest {
     public static final String ACTION_TIMED_REBOOT = "com.ayst.sample.timed_reboot";
 
     private Context mContext;
-    private IMcuService mMcuService;
     private AlarmManager mAlarmManager;
+    private Mcu mMcu;
 
-    @SuppressLint("WrongConstant")
-    public TimingPowerTest(Context context) {
+    public ResumeByAlarmPresenter(Context context) {
         mContext = context;
-        Method method = null;
-        try {
-            method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
-            IBinder binder = (IBinder) method.invoke(null, new Object[]{"mcu"});
-            mMcuService = IMcuService.Stub.asInterface(binder);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mMcu = new Mcu(context);
     }
 
-    public void registerReceiver() {
+    public void start() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_TIMED_POWEROFF);
         filter.addAction(ACTION_TIMED_POWERON);
@@ -56,7 +39,7 @@ public class TimingPowerTest {
         mContext.registerReceiver(mAlarmReceiver, filter);
     }
 
-    public void unRegisterReceiver() {
+    public void stop() {
         mContext.unregisterReceiver(mAlarmReceiver);
     }
 
@@ -77,7 +60,7 @@ public class TimingPowerTest {
 
         long alarmMillis = 0;
         if (differMillis > 0) {
-            Log.i(TAG, "setAlarm, action: " + action + ", " +
+            Log.i(TAG, "startAlarm, action: " + action + ", " +
                     "today->" +
                     String.format("%02d", hourOfDay) + ":"
                     + String.format("%02d", minute) + ":"
@@ -85,7 +68,7 @@ public class TimingPowerTest {
 
             alarmMillis = differMillis;
         } else {
-            Log.i(TAG, "setAlarm, action: " + action + ", " +
+            Log.i(TAG, "startAlarm, action: " + action + ", " +
                     "tomorrow->" +
                     String.format("%02d", hourOfDay) + ":"
                     + String.format("%02d", minute) + ":"
@@ -100,7 +83,6 @@ public class TimingPowerTest {
             setAlarm(action, alarmMillis + System.currentTimeMillis());
         }
     }
-
 
     private void setAlarm(String action, long time) {
         stopAlarm(action);
@@ -121,22 +103,8 @@ public class TimingPowerTest {
         mAlarmManager.cancel(intent);
     }
 
-
-    /**
-     * Set the boot countdown
-     *
-     * @param time (unit: second)
-     * @return <0：error
-     */
     public int setUptime(int time) {
-        if (null != mMcuService) {
-            try {
-                return mMcuService.setUptime(time);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        }
-        return -1;
+        return mMcu.setUptime(time);
     }
 
     private BroadcastReceiver mAlarmReceiver = new BroadcastReceiver() {
@@ -145,7 +113,7 @@ public class TimingPowerTest {
             String action = intent.getAction();
             Log.i(TAG, "Alarm receiver action: " + action);
             if (TextUtils.equals(ACTION_TIMED_POWEROFF, action)) {
-                AppUtil.powerOff(mContext);
+                AppUtil.shutdown(mContext);
             } else if (TextUtils.equals(ACTION_TIMED_REBOOT, action)) {
                 AppUtil.reboot(mContext);
             }

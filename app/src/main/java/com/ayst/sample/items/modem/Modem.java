@@ -1,4 +1,4 @@
-package com.ayst.item;
+package com.ayst.sample.items.modem;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,18 +13,18 @@ import java.lang.reflect.Method;
  * Created by Administrator on 2018/11/6.
  */
 
-public class ModemTest {
+public class Modem {
     private IModemService mModemService;
 
     @SuppressLint("WrongConstant")
-    public ModemTest(Context context) {
+    public Modem(Context context) {
         Method method = null;
         try {
             method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);
             IBinder binder = (IBinder) method.invoke(null, new Object[]{"modem"});
             mModemService = IModemService.Stub.asInterface(binder);
             if (mModemService == null) {
-                Log.i("ModemTest", "mModemService is null");
+                Log.i("Modem", "mModemService is null");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,7 +56,7 @@ public class ModemTest {
     public int reset() {
         if (null != mModemService) {
             try {
-                Log.i("ModemTest", "reset");
+                Log.i("Modem", "reset");
                 return mModemService.reset();
             } catch (RemoteException e) {
                 e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.ayst.item;
+package com.ayst.sample.items.gpio;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,11 +12,11 @@ import java.lang.reflect.Method;
  * Created by Administrator on 2018/11/6.
  */
 
-public class GpioTest {
+public class Gpio {
     private IGpioService mGpioService;
 
     @SuppressLint("WrongConstant")
-    public GpioTest(Context context) {
+    public Gpio(Context context) {
         Method method = null;
         try {
             method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);

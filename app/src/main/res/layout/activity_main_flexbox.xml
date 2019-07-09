@@ -34,13 +34,22 @@
                     android:id="@+id/btn_root_test"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Root test" />
+                    android:text="Root" />
+
+                <TextView
+                    android:id="@+id/tv_root_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center_vertical"
+                    android:text="--"
+                    android:textColor="@color/colorAccent" />
 
                 <Button
                     android:id="@+id/btn_silent_install"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Silent installation" />
+                    android:text="Silent install" />
 
                 <Button
                     android:id="@+id/btn_reboot"
@@ -54,19 +63,29 @@
                     android:layout_height="wrap_content"
                     android:text="Shutdown" />
 
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Camera" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_group"
+                android:padding="3dp"
+                app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap">
+
                 <ToggleButton
                     android:id="@+id/btn_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Open camera"
-                    android:textOn="Close camera" />
-
-                <ToggleButton
-                    android:id="@+id/btn_sensor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textOff="Far"
-                    android:textOn="Near" />
+                    android:textOff="Open"
+                    android:textOn="Close" />
 
                 <LinearLayout
                     android:id="@+id/layout_camera"
@@ -74,6 +93,45 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Proximity Sensor" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_group"
+                android:padding="3dp"
+                app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="proximity:"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_proximity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="--"
+                        android:textColor="@color/colorAccent" />
 
                 </LinearLayout>
 
@@ -264,19 +322,19 @@
                 app:alignItems="stretch"
                 app:flexWrap="wrap">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="voltage:"
-                        android:textColor="@color/black" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="voltage:"
+                    android:textColor="@color/black" />
 
-                    <TextView
-                        android:id="@+id/tv_voltage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="--"
-                        android:textColor="@color/colorAccent" />
+                <TextView
+                    android:id="@+id/tv_voltage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="--"
+                    android:textColor="@color/colorAccent" />
 
             </com.google.android.flexbox.FlexboxLayout>
 
@@ -307,7 +365,7 @@
                     android:id="@+id/spn_gpio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical" />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -554,7 +612,7 @@
                     android:id="@+id/spn_usb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical" />
 
                 <ToggleButton
                     android:id="@+id/btn_listen_usb"
@@ -562,12 +620,12 @@
                     android:layout_height="wrap_content"
                     android:textOff="Listen"
                     android:textOn="Listen" />
-                
+
                 <TextView
                     android:id="@+id/tv_usb_data"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:background="@drawable/bg_group"/>
+                    android:background="@drawable/bg_group" />
 
             </com.google.android.flexbox.FlexboxLayout>
 

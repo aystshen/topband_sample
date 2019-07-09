@@ -1,4 +1,4 @@
-package com.ayst.item;
+package com.ayst.sample.items.other;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,26 +12,24 @@ import java.nio.charset.Charset;
 /**
  * Created by Administrator on 2018/4/25.
  */
-
 public class SilentInstall {
     private static final String TAG = "SilentInstall";
 
     /**
-     * 执行具体的静默安装逻辑，不需要root权限。
+     * Silent install
      *
-     * @param apkPath 要安装的apk文件的路径
-     * @return 安装成功返回true，安装失败返回false。
+     * @param apkPath The apk file path
+     * @return true: success false: failed
      */
     public static boolean install(Context context, String apkPath) {
         boolean result = false;
         BufferedReader errorStream = null;
         DataOutputStream dataOutputStream = null;
+
         try {
-            // 申请root权限
             Process process = Runtime.getRuntime().exec("sh");
             dataOutputStream = new DataOutputStream(process.getOutputStream());
 
-            // 执行pm install命令
             String command = "pm install -r " + apkPath + "\n";
             dataOutputStream.write(command.getBytes(Charset.forName("utf-8")));
             dataOutputStream.flush();
@@ -42,12 +40,13 @@ public class SilentInstall {
             errorStream = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             String msg = "";
             String line;
-            // 读取命令的执行结果
             while ((line = errorStream.readLine()) != null) {
                 msg += line;
             }
             Log.d(TAG, "install msg is " + msg);
-            // 如果执行结果中包含Failure字样就认为是安装失败，否则就认为安装成功
+            /* Installation is considered a Failure if the result contains
+            the Failure character, or a success if it is not.
+             */
             if (!msg.contains("Failure")) {
                 result = true;
             }

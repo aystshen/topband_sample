@@ -1,4 +1,4 @@
-package com.ayst.item;
+package com.ayst.sample.items.resumebyalarm;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,11 +12,11 @@ import java.lang.reflect.Method;
  * Created by Administrator on 2018/11/6.
  */
 
-public class McuTest {
+public class Mcu {
     private IMcuService mMcuService;
 
     @SuppressLint("WrongConstant")
-    public McuTest(Context context) {
+    public Mcu(Context context) {
         Method method = null;
         try {
             method = Class.forName("android.os.ServiceManager").getMethod("getService", String.class);

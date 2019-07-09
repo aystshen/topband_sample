@@ -44,7 +44,6 @@ public class AppUtil {
     // MAC地址获取
     private static String mEth0Mac = "";
     private static String mWifiMac = "";
-    public static String mImei = "";
 
     // 屏幕宽高
     private static int mScreenWidth = -1;
@@ -159,43 +158,7 @@ public class AppUtil {
         return mScreenHeight;
     }
 
-    /**
-     * 铃声
-     *
-     * @param context
-     * @return
-     */
-    public static MediaPlayer ring(final Context context, MediaPlayer mp, int ringId, boolean isRepeat) {
-        try {
-            if (null == mp) {
-                mp = MediaPlayer.create(context, ringId);
-            }
-            mp.setLooping(isRepeat);
-            mp.start();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-        return mp;
-    }
-
-    /**
-     * 手机震动
-     */
-    public static Vibrator vibrate(final Context context, Vibrator vib, boolean isRepeat) {
-        if (null == vib) {
-            vib = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
-        }
-
-        vib.vibrate(new long[]{1000, 1000, 1000, 1000, 1000}, isRepeat ? 1
-                : -1);
-        return vib;
-    }
-
-    public static boolean isExternalStorageMounted() {
+    private static boolean isExternalStorageMounted() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
@@ -233,119 +196,6 @@ public class AppUtil {
             file.mkdirs();
         }
         return dir;
-    }
-
-    public static boolean hasFrontCamera() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            int count = Camera.getNumberOfCameras();
-
-            for (int i = 0; i < count; i++) {
-
-                Camera.CameraInfo info = new Camera.CameraInfo();
-                Camera.getCameraInfo(i, info);
-
-                if (info != null) {
-                    if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        return false;
-    }
-
-    public static String getDisplayNameByNumber(Context context, String number) {
-        String displayName = null;
-        Cursor cursor = null;
-
-        try {
-            ContentResolver resolver = context.getContentResolver();
-            Uri uri = ContactsContract.PhoneLookup.CONTENT_FILTER_URI.buildUpon().appendPath(number).build();
-            String[] projection = new String[]{ContactsContract.PhoneLookup._ID, ContactsContract.PhoneLookup.DISPLAY_NAME};
-            cursor = resolver.query(uri, projection, null, null, null);
-
-            if (cursor != null && cursor.moveToFirst()) {
-                int columnIndexName = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME);
-                displayName = cursor.getString(columnIndexName);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-
-        return displayName;
-    }
-
-    public static int getAttrColor(Context context, int attr, int defValue) {
-        TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(attr, typedValue, true);
-        TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, new int[]{attr});
-        int color = typedArray.getColor(0, defValue);
-        typedArray.recycle();
-        return color;
-    }
-
-    public static Drawable getAttrDrawable(Context context, int attr) {
-        TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(attr, typedValue, true);
-        TypedArray typedArray = context.obtainStyledAttributes(typedValue.data, new int[]{attr});
-        Drawable drawable = typedArray.getDrawable(0);
-        typedArray.recycle();
-        return drawable;
-    }
-
-    private static boolean checkCameraFacing(final int facing) {
-        if (getSdkVersion() < Build.VERSION_CODES.GINGERBREAD) {
-            return false;
-        }
-        final int cameraCount = Camera.getNumberOfCameras();
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        for (int i = 0; i < cameraCount; i++) {
-            Camera.getCameraInfo(i, info);
-            if (facing == info.facing) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 检查设备是否有摄像头
-     *
-     * @return
-     */
-    public static boolean hasCamera() {
-        return hasBackFacingCamera() || hasFrontFacingCamera();
-    }
-
-    /**
-     * 检查设备是否有后置摄像头
-     *
-     * @return
-     */
-    public static boolean hasBackFacingCamera() {
-        final int CAMERA_FACING_BACK = 0;
-        return checkCameraFacing(CAMERA_FACING_BACK);
-    }
-
-    /**
-     * 检查设备是否有前置摄像头
-     *
-     * @return
-     */
-    public static boolean hasFrontFacingCamera() {
-        final int CAMERA_FACING_BACK = 1;
-        return checkCameraFacing(CAMERA_FACING_BACK);
-    }
-
-    public static int getSdkVersion() {
-        return android.os.Build.VERSION.SDK_INT;
     }
 
     /**
@@ -392,7 +242,7 @@ public class AppUtil {
         context.sendBroadcast(intent);
     }
 
-    public static void powerOff(Context context) {
+    public static void shutdown(Context context) {
         Intent intent = new Intent("com.android.internal.intent.action.REQUEST_SHUTDOWN");
         intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
