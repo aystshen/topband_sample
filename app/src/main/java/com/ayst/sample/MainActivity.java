@@ -3,8 +3,6 @@ package com.ayst.sample;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,6 +19,9 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ayst.sample.items.modem.IModemView;
 import com.ayst.sample.items.modem.ModemPresenter;

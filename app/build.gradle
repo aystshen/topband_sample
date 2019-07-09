@@ -10,7 +10,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode
         versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
     }
@@ -32,10 +32,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            applicationVariants.all { variant ->
+            android.applicationVariants.all { variant ->
                 variant.outputs.all {
-                    def fileName = "Sample_${variant.buildType.name}_v${variant.versionName}_${releaseTime()}.apk"
-                    outputFileName = fileName
+                    outputFileName = "Sample_${variant.buildType.name}-${variant.versionName}-${releaseTime()}.apk"
                 }
             }
         }
@@ -55,25 +54,32 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
 
-    implementation 'com.android.support:multidex:1.0.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation 'cn.trinea.android.common:trinea-android-common:4.2.15'
 
     // butterknife
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // TimePicker
     implementation 'com.wdullaer:materialdatetimepicker:3.5.1'
@@ -162,7 +168,7 @@ configurations.all {
         def requested = details.requested
         if (requested.group == 'com.android.support') {
             if (!requested.name.startsWith("multidex")) {
-                details.useVersion '27.1.0'
+                details.useVersion '28.0.0'
             }
         }
     }
