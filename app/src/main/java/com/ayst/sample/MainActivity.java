@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements
     Button mModemResetBtn;
     @BindView(R.id.tv_root_result)
     TextView mRootResultTv;
-    @BindView(R.id.tv_proximity)
-    TextView mProximityTv;
+    @BindView(R.id.tv_human)
+    TextView mHumanTv;
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -403,11 +403,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void updateProximitySensorData(float value) {
-        mProximityTv.setText(value + "");
-    }
-
-    @Override
     public void updateAccSensorData(float x, float y, float z) {
         mAccXTv.setText(x + "");
         mAccYTv.setText(y + "");
@@ -424,6 +419,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateAdcSensorData(float value) {
         mVoltageTv.setText(value + "");
+    }
+
+    @Override
+    public void updateHumanSensorData(float value) {
+        mHumanTv.setText(value + "");
     }
 
     @Override

@@ -15,6 +15,7 @@ public class SensorPresenter {
     private SensorEventListener mAccSensorEventListener;
     private SensorEventListener mGyroSensorEventListener;
     private SensorEventListener mAdcSensorEventListener;
+    private SensorEventListener mHumanSensorEventListener;
 
     public SensorPresenter(Context context, ISensorView view) {
         mContext = context;
@@ -80,6 +81,24 @@ public class SensorPresenter {
                     }
                 };
                 mSensorManager.registerListener(mAdcSensorEventListener, adcSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+
+            // Human Sensor
+            Sensor humanSensor = mSensorManager.getDefaultSensor(27); // 27: Sensor.TYPE_HUMAN
+            if (humanSensor != null) {
+                mHumanSensorEventListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+                        float human = event.values[0];
+                        mSensorView.updateHumanSensorData(human);
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+                mSensorManager.registerListener(mHumanSensorEventListener, humanSensor, SensorManager.SENSOR_DELAY_NORMAL);
             }
         }
     }
