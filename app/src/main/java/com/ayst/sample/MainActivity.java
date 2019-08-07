@@ -125,6 +125,8 @@ public class MainActivity extends AppCompatActivity implements
     TextView mRootResultTv;
     @BindView(R.id.tv_human)
     TextView mHumanTv;
+    @BindView(R.id.btn_screen)
+    ToggleButton mScreenBtn;
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements
         mTimingPowerOnBtn.setOnCheckedChangeListener(this);
         mTimingPowerOffBtn.setOnCheckedChangeListener(this);
         mTimingRebootBtn.setOnCheckedChangeListener(this);
+        mScreenBtn.setOnCheckedChangeListener(this);
 
         // init gpio
         if (mGpioPresenter.getNumber() > 0) {
@@ -335,6 +338,12 @@ public class MainActivity extends AppCompatActivity implements
                     mUsbPresenter.disconnect();
                 }
                 break;
+            case R.id.btn_screen:
+                if (b) {
+                    mOtherPresenter.screenOn();
+                } else {
+                    mOtherPresenter.screenOff();
+                }
         }
     }
 

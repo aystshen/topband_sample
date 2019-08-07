@@ -1,6 +1,7 @@
 package com.ayst.sample.items.other;
 
 import android.content.Context;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.ayst.utils.AppUtil;
@@ -12,6 +13,8 @@ public class OtherPresenter {
 
     private Context mContext;
     private IOtherView mOtherView;
+    private PowerManager mPowerManager;
+    private PowerManager.WakeLock mWakeLock;
 
     public OtherPresenter(Context context, IOtherView view) {
         mContext = context;
@@ -36,5 +39,23 @@ public class OtherPresenter {
 
     public void shutdown() {
         AppUtil.shutdown(mContext);
+    }
+
+    public void screenOn() {
+        if (null == mPowerManager) {
+            mPowerManager = ((PowerManager) mContext.getSystemService(Context.POWER_SERVICE));
+            mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+                    | PowerManager.ON_AFTER_RELEASE, "Sample:WakeLock");
+        }
+        mWakeLock.acquire();
+    }
+
+    public void screenOff() {
+        if (null == mPowerManager) {
+            mPowerManager = ((PowerManager) mContext.getSystemService(Context.POWER_SERVICE));
+            mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+                    | PowerManager.ON_AFTER_RELEASE, "Sample:WakeLock");
+        }
+        mWakeLock.release();
     }
 }

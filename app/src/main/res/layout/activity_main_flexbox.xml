@@ -63,6 +63,13 @@
                     android:layout_height="wrap_content"
                     android:text="Shutdown" />
 
+                <ToggleButton
+                    android:id="@+id/btn_screen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="SCREEN ON"
+                    android:textOn="SCREEN OFF" />
+
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView
