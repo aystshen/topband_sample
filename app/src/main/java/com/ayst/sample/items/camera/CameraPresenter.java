@@ -4,9 +4,12 @@ import android.content.Context;
 import android.hardware.Camera;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.ayst.utils.AppUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -105,6 +108,15 @@ public class CameraPresenter {
                     mCameraView.addCameraView(surface);
                 }
             }
+
+            StringBuilder sb = new StringBuilder();
+            for (int i=0; i<cameraNumber; i++) {
+                String pidvid = AppUtil.getProperty("topband.dev.video" + i, "");
+                if (!TextUtils.isEmpty(pidvid)) {
+                    sb.append("video" + i + "(" + pidvid + ") ");
+                }
+            }
+            mCameraView.updateCameraInfo(sb.toString());
 
             mHandler.postDelayed(this, 5000);
         }

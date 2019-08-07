@@ -5,4 +5,5 @@ import android.view.SurfaceView;
 public interface ICameraView {
     void removeCameraView();
     void addCameraView(SurfaceView surface);
+    void updateCameraInfo(String info);
 }

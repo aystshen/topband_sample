@@ -23,20 +23,20 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ayst.sample.items.modem.IModemView;
-import com.ayst.sample.items.modem.ModemPresenter;
-import com.ayst.sample.items.resumebyalarm.ResumeByAlarmPresenter;
-import com.ayst.sample.items.usb.IUsbView;
-import com.ayst.sample.items.usb.UsbPresenter;
-import com.ayst.sample.items.watchdog.IWatchdogView;
 import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
 import com.ayst.sample.items.gpio.GpioPresenter;
 import com.ayst.sample.items.gpio.IGpioView;
+import com.ayst.sample.items.modem.IModemView;
+import com.ayst.sample.items.modem.ModemPresenter;
 import com.ayst.sample.items.other.IOtherView;
 import com.ayst.sample.items.other.OtherPresenter;
+import com.ayst.sample.items.resumebyalarm.ResumeByAlarmPresenter;
 import com.ayst.sample.items.sensor.ISensorView;
 import com.ayst.sample.items.sensor.SensorPresenter;
+import com.ayst.sample.items.usb.IUsbView;
+import com.ayst.sample.items.usb.UsbPresenter;
+import com.ayst.sample.items.watchdog.IWatchdogView;
 import com.ayst.sample.items.watchdog.WatchdogPresenter;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mGpioBtn;
     @BindView(R.id.btn_camera)
     ToggleButton mCameraBtn;
+    @BindView(R.id.tv_camera_info)
+    TextView mCameraInfoTv;
     @BindView(R.id.layout_camera)
     LinearLayout mCameraLayout;
     @BindView(R.id.spn_gpio)
@@ -127,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
     private static final int TYPE_REBOOT = 2;
+
     private int mTimePickerType = TYPE_POWER_ON;
 
     private OtherPresenter mOtherPresenter;
@@ -400,6 +403,11 @@ public class MainActivity extends AppCompatActivity implements
     public void addCameraView(SurfaceView surface) {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(300, 225);
         mCameraLayout.addView(surface, layoutParams);
+    }
+
+    @Override
+    public void updateCameraInfo(String info) {
+        mCameraInfoTv.setText(info);
     }
 
     @Override

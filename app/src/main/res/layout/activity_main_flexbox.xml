@@ -87,6 +87,13 @@
                     android:textOff="Open"
                     android:textOn="Close" />
 
+                <TextView
+                    android:id="@+id/tv_camera_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black" />
+
                 <LinearLayout
                     android:id="@+id/layout_camera"
                     android:layout_width="match_parent"
