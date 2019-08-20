@@ -2,6 +2,7 @@ package com.ayst.sample;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.media.MediaMetadata;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -23,6 +24,8 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ayst.sample.items.a2dpsink.A2dpSinkPresenter;
+import com.ayst.sample.items.a2dpsink.IA2dpSinkView;
 import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
 import com.ayst.sample.items.gpio.GpioPresenter;
@@ -48,7 +51,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener, IOtherView,
         ICameraView, ISensorView, IGpioView, IWatchdogView,
-        IModemView, IUsbView {
+        IModemView, IUsbView, IA2dpSinkView {
     private static final String TAG = "Sample";
 
     @BindView(R.id.btn_root_test)
@@ -127,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements
     TextView mHumanTv;
     @BindView(R.id.btn_screen)
     ToggleButton mScreenBtn;
+    @BindView(R.id.tv_a2dpsink_media_info)
+    TextView mA2dpSinkMediaInfoTv;
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -142,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements
     private ResumeByAlarmPresenter mResumeByAlarmPresenter;
     private ModemPresenter mModemPresenter;
     private UsbPresenter mUsbPresenter;
+    private A2dpSinkPresenter mA2dpSinkPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements
         mResumeByAlarmPresenter = new ResumeByAlarmPresenter(this);
         mModemPresenter = new ModemPresenter(this, this);
         mUsbPresenter = new UsbPresenter(this, this);
+        mA2dpSinkPresenter = new A2dpSinkPresenter(this, this);
 
         initView();
     }
@@ -170,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements
         mResumeByAlarmPresenter.start();
         mModemPresenter.start();
         mUsbPresenter.start();
+        mA2dpSinkPresenter.start();
     }
 
     @Override
@@ -179,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements
         mResumeByAlarmPresenter.stop();
         mModemPresenter.stop();
         mUsbPresenter.stop();
+        mA2dpSinkPresenter.stop();
     }
 
     @Override
@@ -467,5 +476,25 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateUsbDeviceList(int position) {
         mUsbDeviceSpn.setSelection(position);
+    }
+
+    @Override
+    public void updateA2dpSinkMediaInfo(MediaMetadata info) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("title: ").append(info.getString(MediaMetadata.METADATA_KEY_TITLE)).append("\n");
+        sb.append("artist: ").append(info.getString(MediaMetadata.METADATA_KEY_ARTIST)).append("\n");
+        sb.append("album: ").append(info.getString(MediaMetadata.METADATA_KEY_ALBUM)).append("\n");
+        sb.append("author: ").append(info.getString(MediaMetadata.METADATA_KEY_AUTHOR)).append("\n");
+        sb.append("writer: ").append(info.getString(MediaMetadata.METADATA_KEY_WRITER)).append("\n");
+        sb.append("composer: ").append(info.getString(MediaMetadata.METADATA_KEY_COMPOSER)).append("\n");
+        sb.append("compilation: ").append(info.getString(MediaMetadata.METADATA_KEY_COMPILATION)).append("\n");
+        sb.append("date: ").append(info.getString(MediaMetadata.METADATA_KEY_DATE)).append("\n");
+        sb.append("genre: ").append(info.getString(MediaMetadata.METADATA_KEY_GENRE)).append("\n");
+        sb.append("album artist: ").append(info.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST)).append("\n");
+        sb.append("display title: ").append(info.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)).append("\n");
+        sb.append("sub title: ").append(info.getString(MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE)).append("\n");
+        sb.append("description: ").append(info.getString(MediaMetadata.METADATA_KEY_DISPLAY_DESCRIPTION)).append("\n");
+
+        mA2dpSinkMediaInfoTv.setText(sb.toString());
     }
 }
