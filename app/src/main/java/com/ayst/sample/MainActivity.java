@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -26,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ayst.sample.items.a2dpsink.A2dpSinkPresenter;
 import com.ayst.sample.items.a2dpsink.IA2dpSinkView;
+import com.ayst.sample.items.backlight.BacklightPresenter;
 import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
 import com.ayst.sample.items.gpio.GpioPresenter;
@@ -51,7 +53,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener, IOtherView,
         ICameraView, ISensorView, IGpioView, IWatchdogView,
-        IModemView, IUsbView, IA2dpSinkView {
+        IModemView, IUsbView, IA2dpSinkView, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = "Sample";
 
     @BindView(R.id.btn_root_test)
@@ -132,6 +134,14 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mScreenBtn;
     @BindView(R.id.tv_a2dpsink_media_info)
     TextView mA2dpSinkMediaInfoTv;
+    @BindView(R.id.seekbar_main_backlight)
+    SeekBar mMainBacklightSeekbar;
+    @BindView(R.id.seekbar_sub_backlight)
+    SeekBar mSubBacklightSeekbar;
+    @BindView(R.id.btn_keycode)
+    ToggleButton mKeycodeBtn;
+    @BindView(R.id.btn_fullscreen)
+    ToggleButton mFullscreenBtn;
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -148,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements
     private ModemPresenter mModemPresenter;
     private UsbPresenter mUsbPresenter;
     private A2dpSinkPresenter mA2dpSinkPresenter;
+    private BacklightPresenter mBacklightPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements
         mModemPresenter = new ModemPresenter(this, this);
         mUsbPresenter = new UsbPresenter(this, this);
         mA2dpSinkPresenter = new A2dpSinkPresenter(this, this);
+        mBacklightPresenter = new BacklightPresenter(this);
 
         initView();
     }
@@ -202,6 +214,9 @@ public class MainActivity extends AppCompatActivity implements
         mTimingPowerOffBtn.setOnCheckedChangeListener(this);
         mTimingRebootBtn.setOnCheckedChangeListener(this);
         mScreenBtn.setOnCheckedChangeListener(this);
+        mFullscreenBtn.setOnCheckedChangeListener(this);
+        mMainBacklightSeekbar.setOnSeekBarChangeListener(this);
+        mSubBacklightSeekbar.setOnSeekBarChangeListener(this);
 
         // init gpio
         if (mGpioPresenter.getNumber() > 0) {
@@ -353,6 +368,35 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     mOtherPresenter.screenOff();
                 }
+            case R.id.btn_fullscreen:
+                if (b) {
+                    mOtherPresenter.fullScreen(this);
+                } else {
+                    mOtherPresenter.exitFullScreen(this);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        switch (seekBar.getId()) {
+            case R.id.seekbar_main_backlight:
+                mBacklightPresenter.setMainBrightness(seekBar.getProgress());
+                break;
+            case R.id.seekbar_sub_backlight:
+                mBacklightPresenter.setSubBrightness(seekBar.getProgress());
+                break;
         }
     }
 
@@ -362,6 +406,10 @@ public class MainActivity extends AppCompatActivity implements
         if (mGpioPresenter.getMode() == GpioPresenter.Mode.KEY) {
             mGpioPresenter.checkKeyEvent(event);
         }
+
+        mKeycodeBtn.setTextOff("KEY: " + event.getKeyCode());
+        mKeycodeBtn.setTextOn("KEY: " + event.getKeyCode());
+        mKeycodeBtn.setChecked(event.getAction() == KeyEvent.ACTION_DOWN);
 
         return super.dispatchKeyEvent(event);
     }
@@ -497,4 +545,5 @@ public class MainActivity extends AppCompatActivity implements
 
         mA2dpSinkMediaInfoTv.setText(sb.toString());
     }
+
 }

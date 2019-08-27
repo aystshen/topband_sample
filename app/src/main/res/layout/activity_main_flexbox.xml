@@ -70,7 +70,67 @@
                     android:textOff="SCREEN ON"
                     android:textOn="SCREEN OFF" />
 
+                <ToggleButton
+                    android:id="@+id/btn_keycode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="keycode"
+                    android:textOn="keycode" />
+
+                <ToggleButton
+                    android:id="@+id/btn_fullscreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="full screen"
+                    android:textOn="exit full screen" />
+
             </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Backlight" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_group"
+                android:padding="3dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Main Screen Backlight:"
+                    android:textColor="@color/black" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_main_backlight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="5dp"
+                    android:minWidth="300dp"
+                    android:max="255"
+                    android:progress="120"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Sub Screen Backlight:"
+                    android:textColor="@color/black" />
+
+                <SeekBar
+                    android:id="@+id/seekbar_sub_backlight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="5dp"
+                    android:minWidth="300dp"
+                    android:max="255"
+                    android:progress="120"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
