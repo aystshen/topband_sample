@@ -142,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mKeycodeBtn;
     @BindView(R.id.btn_fullscreen)
     ToggleButton mFullscreenBtn;
+    @BindView(R.id.btn_systembar)
+    ToggleButton mSystembarBtn;
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -215,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements
         mTimingRebootBtn.setOnCheckedChangeListener(this);
         mScreenBtn.setOnCheckedChangeListener(this);
         mFullscreenBtn.setOnCheckedChangeListener(this);
+        mSystembarBtn.setOnCheckedChangeListener(this);
         mMainBacklightSeekbar.setOnSeekBarChangeListener(this);
         mSubBacklightSeekbar.setOnSeekBarChangeListener(this);
 
@@ -373,6 +376,13 @@ public class MainActivity extends AppCompatActivity implements
                     mOtherPresenter.fullScreen(this);
                 } else {
                     mOtherPresenter.exitFullScreen(this);
+                }
+                break;
+            case R.id.btn_systembar:
+                if (b) {
+                    mOtherPresenter.hideSystemBar();
+                } else {
+                    mOtherPresenter.showSystemBar();
                 }
                 break;
         }

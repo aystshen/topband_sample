@@ -2,6 +2,7 @@ package com.ayst.sample.items.other;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
@@ -24,6 +25,9 @@ public class OtherPresenter {
         mOtherView = view;
     }
 
+    /**
+     * root权限测试
+     */
     public void root() {
         ShellUtils.CommandResult result = ShellUtils.execCommand("ls -l", true);
 
@@ -32,18 +36,32 @@ public class OtherPresenter {
         mOtherView.updateRootResult(result.errorMsg.isEmpty());
     }
 
+    /**
+     * 静默安装
+     * @param path
+     * @return
+     */
     public boolean silentInstall(String path) {
         return SilentInstall.install(mContext, path);
     }
 
+    /**
+     * 重启
+     */
     public void reboot() {
         AppUtil.reboot(mContext);
     }
 
+    /**
+     * 关机
+     */
     public void shutdown() {
         AppUtil.shutdown(mContext);
     }
 
+    /**
+     * 亮屏
+     */
     public void screenOn() {
         if (null == mPowerManager) {
             mPowerManager = ((PowerManager) mContext.getSystemService(Context.POWER_SERVICE));
@@ -53,6 +71,9 @@ public class OtherPresenter {
         mWakeLock.acquire();
     }
 
+    /**
+     * 灭屏
+     */
     public void screenOff() {
         if (null == mPowerManager) {
             mPowerManager = ((PowerManager) mContext.getSystemService(Context.POWER_SERVICE));
@@ -68,7 +89,6 @@ public class OtherPresenter {
      */
     public void fullScreen(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // 全屏显示，隐藏状态栏和导航栏，拉出状态栏和导航栏显示一会儿后消失
             activity.getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -77,7 +97,6 @@ public class OtherPresenter {
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         } else {
-            // 全屏显示，隐藏状态栏
             activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
     }
@@ -88,5 +107,23 @@ public class OtherPresenter {
      */
     public void exitFullScreen(Activity activity) {
         activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+    }
+
+    /**
+     * 全局隐藏状态栏与导航栏
+     */
+    public void hideSystemBar() {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.SYSTEM_BAR_HIDE");
+        mContext.sendBroadcast(intent);
+    }
+
+    /**
+     * 全局显示状态栏与导航栏
+     */
+    public void showSystemBar() {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.SYSTEM_BAR_SHOW");
+        mContext.sendBroadcast(intent);
     }
 }

@@ -84,6 +84,13 @@
                     android:textOff="full screen"
                     android:textOn="exit full screen" />
 
+                <ToggleButton
+                    android:id="@+id/btn_systembar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Hide System Bar"
+                    android:textOn="Show System Bar" />
+
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView
