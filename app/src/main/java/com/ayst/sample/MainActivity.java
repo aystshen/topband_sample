@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements
         mModemPresenter.start();
         mUsbPresenter.start();
         mA2dpSinkPresenter.start();
+        mWatchdogPresenter.start();
     }
 
     @Override
@@ -202,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements
         mModemPresenter.stop();
         mUsbPresenter.stop();
         mA2dpSinkPresenter.stop();
+        mWatchdogPresenter.stop();
     }
 
     @Override
@@ -268,7 +270,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
-            R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset})
+            R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
+            R.id.btn_switch_watchdog})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_root_test:
@@ -299,6 +302,13 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.btn_modem_reset:
                 mModemPresenter.reset();
                 break;
+            case R.id.btn_switch_watchdog:
+                if (mWatchdogBtn.isChecked()) {
+                    mWatchdogPresenter.openWatchdog();
+                } else {
+                    mWatchdogPresenter.closeWatchdog();
+                }
+                break;
         }
     }
 
@@ -328,11 +338,11 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 break;
             case R.id.btn_switch_watchdog:
-                if (b) {
-                    mWatchdogPresenter.openWatchdog();
-                } else {
-                    mWatchdogPresenter.closeWatchdog();
-                }
+//                if (b) {
+//                    mWatchdogPresenter.openWatchdog();
+//                } else {
+//                    mWatchdogPresenter.closeWatchdog();
+//                }
                 break;
             case R.id.btn_set_power_on_time:
                 if (b) {
@@ -518,6 +528,12 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateCountdown(int countdown) {
         mWatchdogTimeTv.setText(countdown + " seconds");
+    }
+
+    @Override
+    public void updateWatchdogState(boolean isOpen, int duration) {
+        mWatchdogBtn.setChecked(isOpen);
+        mSetWatchdogDurationBtn.setText("Set the timeout: " + duration);
     }
 
     @Override

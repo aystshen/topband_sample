@@ -12,7 +12,6 @@ public class WatchdogPresenter {
     private IWatchdogView mWatchdogView;
     private Mcu mMcu;
 
-    private boolean isOpen = false;
     private int mTimeout = 180; // 默认：3分钟
     private Handler mHandler;
 
@@ -23,15 +22,21 @@ public class WatchdogPresenter {
         mHandler = new Handler(Looper.getMainLooper());
     }
 
+    public void start() {
+        mWatchdogView.updateWatchdogState(mMcu.watchdogIsOpen(), mMcu.getWatchdogDuration());
+    }
+
+    public void stop() {
+
+    }
+
     public void openWatchdog() {
-        isOpen = true;
         mMcu.openWatchdog();
         mHandler.removeCallbacks(mCountdownRunnable);
         mHandler.postDelayed(mCountdownRunnable, 1000);
     }
 
     public void closeWatchdog() {
-        isOpen = false;
         mMcu.closeWatchdog();
         mHandler.removeCallbacks(mCountdownRunnable);
     }
@@ -39,7 +44,7 @@ public class WatchdogPresenter {
     public void setTimeout(int timeout) {
         mTimeout = timeout;
         mMcu.setWatchdogDuration(timeout);
-        if (isOpen) {
+        if (mMcu.watchdogIsOpen()) {
             mHandler.removeCallbacks(mCountdownRunnable);
             mHandler.postDelayed(mCountdownRunnable, 1000);
         }

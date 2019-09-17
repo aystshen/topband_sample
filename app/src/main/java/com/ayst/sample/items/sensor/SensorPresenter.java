@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public class SensorPresenter {
     private static final String TAG = "SensorPresenter";
@@ -84,8 +85,9 @@ public class SensorPresenter {
             }
 
             // Human Sensor
-            Sensor humanSensor = mSensorManager.getDefaultSensor(27); // 27: Sensor.TYPE_HUMAN
+            Sensor humanSensor = mSensorManager.getDefaultSensor(36); // 27: Sensor.TYPE_HUMAN
             if (humanSensor != null) {
+                Log.e(TAG, "humanSensor>>>>");
                 mHumanSensorEventListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
@@ -99,6 +101,8 @@ public class SensorPresenter {
                     }
                 };
                 mSensorManager.registerListener(mHumanSensorEventListener, humanSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Log.e(TAG, "humanSensor is null");
             }
         }
     }

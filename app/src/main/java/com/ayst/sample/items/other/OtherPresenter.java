@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.ayst.utils.AppUtil;
 
+import java.io.File;
+
 import cn.trinea.android.common.util.ShellUtils;
 
 public class OtherPresenter {
