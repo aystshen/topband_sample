@@ -27,6 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ayst.sample.items.a2dpsink.A2dpSinkPresenter;
 import com.ayst.sample.items.a2dpsink.IA2dpSinkView;
+import com.ayst.sample.items.androidx.AndroidXPresenter;
+import com.ayst.sample.items.androidx.IAndroidXView;
 import com.ayst.sample.items.backlight.BacklightPresenter;
 import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
@@ -53,8 +55,13 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener, IOtherView,
         ICameraView, ISensorView, IGpioView, IWatchdogView,
-        IModemView, IUsbView, IA2dpSinkView, SeekBar.OnSeekBarChangeListener {
+        IModemView, IUsbView, IA2dpSinkView, SeekBar.OnSeekBarChangeListener, IAndroidXView {
     private static final String TAG = "Sample";
+
+    private static final int TYPE_POWER_ON = 0;
+    private static final int TYPE_POWER_OFF = 1;
+    private static final int TYPE_REBOOT = 2;
+    private int mTimePickerType = TYPE_POWER_ON;
 
     @BindView(R.id.btn_root_test)
     Button mRootTestBtn;
@@ -144,12 +151,12 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mFullscreenBtn;
     @BindView(R.id.btn_systembar)
     ToggleButton mSystembarBtn;
-
-    private static final int TYPE_POWER_ON = 0;
-    private static final int TYPE_POWER_OFF = 1;
-    private static final int TYPE_REBOOT = 2;
-
-    private int mTimePickerType = TYPE_POWER_ON;
+    @BindView(R.id.btn_androidx_4g)
+    ToggleButton mAndroidx4gBtn;
+    @BindView(R.id.btn_androidx_watchdog)
+    ToggleButton mAndroidxWatchdogBtn;
+    @BindView(R.id.btn_androidx_watchdog_timeout)
+    Button mAndroidxWatchdogTimeoutBtn;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -161,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements
     private UsbPresenter mUsbPresenter;
     private A2dpSinkPresenter mA2dpSinkPresenter;
     private BacklightPresenter mBacklightPresenter;
+    private AndroidXPresenter mAndroidXPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements
         mUsbPresenter = new UsbPresenter(this, this);
         mA2dpSinkPresenter = new A2dpSinkPresenter(this, this);
         mBacklightPresenter = new BacklightPresenter(this);
+        mAndroidXPresenter = new AndroidXPresenter(this, this);
 
         initView();
     }
@@ -193,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements
         mUsbPresenter.start();
         mA2dpSinkPresenter.start();
         mWatchdogPresenter.start();
+        mAndroidXPresenter.start();
     }
 
     @Override
@@ -204,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements
         mUsbPresenter.stop();
         mA2dpSinkPresenter.stop();
         mWatchdogPresenter.stop();
+        mAndroidXPresenter.stop();
     }
 
     @Override
@@ -271,7 +282,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
-            R.id.btn_switch_watchdog})
+            R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
+            R.id.btn_androidx_watchdog_timeout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_root_test:
@@ -294,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 break;
             case R.id.btn_set_watchdog_time:
-                showWatchdogDurationPickerDialog();
+                showWatchdogDurationPickerDialog(false);
                 break;
             case R.id.btn_heartbeat:
                 mWatchdogPresenter.sendHeartbeat();
@@ -308,6 +320,15 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     mWatchdogPresenter.closeWatchdog();
                 }
+                break;
+            case R.id.btn_androidx_4g:
+                mAndroidXPresenter.toggle4GKeepLive(mAndroidx4gBtn.isChecked());
+                break;
+            case R.id.btn_androidx_watchdog:
+                mAndroidXPresenter.toggleWatchdog(mAndroidxWatchdogBtn.isChecked());
+                break;
+            case R.id.btn_androidx_watchdog_timeout:
+                showWatchdogDurationPickerDialog(true);
                 break;
         }
     }
@@ -454,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements
         tpd.show(getFragmentManager(), "timepickerdialog");
     }
 
-    private void showWatchdogDurationPickerDialog() {
+    private void showWatchdogDurationPickerDialog(final boolean androidx) {
         final EditText editText = new EditText(this);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -465,8 +486,12 @@ public class MainActivity extends AppCompatActivity implements
             public void onClick(DialogInterface dialog, int which) {
                 String str = editText.getText().toString();
                 if (!TextUtils.isEmpty(str)) {
-                    mWatchdogTimeTv.setText(str + " seconds");
-                    mWatchdogPresenter.setTimeout(Integer.parseInt(str));
+                    if (androidx) {
+                        mAndroidXPresenter.setWatchdogTimeout(Integer.parseInt(str));
+                    } else {
+                        mWatchdogTimeTv.setText(str + " seconds");
+                        mWatchdogPresenter.setTimeout(Integer.parseInt(str));
+                    }
                 }
                 dialog.dismiss();
             }
@@ -572,4 +597,18 @@ public class MainActivity extends AppCompatActivity implements
         mA2dpSinkMediaInfoTv.setText(sb.toString());
     }
 
+    @Override
+    public void updateAndroidX4GState(boolean enable) {
+        mAndroidx4gBtn.setChecked(enable);
+    }
+
+    @Override
+    public void updateAndroidXWatchdogState(boolean enable) {
+        mAndroidxWatchdogBtn.setChecked(enable);
+    }
+
+    @Override
+    public void updateAndroidXWatchdogTimeout(int timeout) {
+        mAndroidxWatchdogTimeoutBtn.setText("Watchdog Timeout: " + timeout + " s");
+    }
 }

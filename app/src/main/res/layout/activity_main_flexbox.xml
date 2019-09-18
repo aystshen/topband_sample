@@ -97,13 +97,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="AndroidX" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_group"
+                android:padding="3dp"
+                app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap">
+
+                <ToggleButton
+                    android:id="@+id/btn_androidx_4g"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="4G Keep Live"
+                    android:textOn="4G Keep Live" />
+
+                <ToggleButton
+                    android:id="@+id/btn_androidx_watchdog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Watchdog"
+                    android:textOn="Watchdog" />
+
+                <Button
+                    android:id="@+id/btn_androidx_watchdog_timeout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Watchdog Timeout" />
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Backlight" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:background="@drawable/bg_group"
+                android:orientation="vertical"
                 android:padding="3dp">
 
                 <TextView
@@ -117,9 +154,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_marginTop="5dp"
-                    android:minWidth="300dp"
                     android:max="255"
-                    android:progress="120"/>
+                    android:minWidth="300dp"
+                    android:progress="120" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -133,9 +170,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_marginTop="5dp"
-                    android:minWidth="300dp"
                     android:max="255"
-                    android:progress="120"/>
+                    android:minWidth="300dp"
+                    android:progress="120" />
 
             </LinearLayout>
 
