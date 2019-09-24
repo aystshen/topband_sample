@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements
         mA2dpSinkPresenter.start();
         mWatchdogPresenter.start();
         mAndroidXPresenter.start();
+        mOtherPresenter.start();
     }
 
     @Override
@@ -215,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements
         mA2dpSinkPresenter.stop();
         mWatchdogPresenter.stop();
         mAndroidXPresenter.stop();
+        mOtherPresenter.stop();
     }
 
     @Override

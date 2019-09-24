@@ -1,8 +1,10 @@
 package com.ayst.sample.items.other;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
@@ -25,6 +27,14 @@ public class OtherPresenter {
     public OtherPresenter(Context context, IOtherView view) {
         mContext = context;
         mOtherView = view;
+    }
+
+    public void start() {
+        registerPackageChangeBroadcast();
+    }
+
+    public void stop() {
+        unregisterPackageChangeBroadcast();
     }
 
     /**
@@ -128,4 +138,27 @@ public class OtherPresenter {
         intent.setAction("android.intent.action.SYSTEM_BAR_SHOW");
         mContext.sendBroadcast(intent);
     }
+
+    private void registerPackageChangeBroadcast() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        intentFilter.addDataScheme("package");
+        mContext.registerReceiver(mPackageChangeReceiver, intentFilter);
+    }
+
+    private void unregisterPackageChangeBroadcast() {
+        if (null != mPackageChangeReceiver) {
+            mContext.unregisterReceiver(mPackageChangeReceiver);
+        }
+    }
+
+    private BroadcastReceiver mPackageChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.i(TAG, "Package change receive action: " + action);
+        }
+    };
 }
