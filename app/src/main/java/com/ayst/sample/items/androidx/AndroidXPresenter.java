@@ -43,6 +43,10 @@ public class AndroidXPresenter {
     public void stop() {
     }
 
+    /**
+     * 打开、关闭4G保活服务
+     * @param on
+     */
     public void toggle4GKeepLive(boolean on) {
         Intent intent = new Intent();
         intent.setAction(ACTION_4G_KEEP_LIVE);
@@ -51,6 +55,10 @@ public class AndroidXPresenter {
         mContext.sendBroadcast(intent, RECEIVER_PERMISSION);
     }
 
+    /**
+     * 打开、关闭看门狗
+     * @param on
+     */
     public void toggleWatchdog(boolean on) {
         Intent intent = new Intent();
         intent.setAction(ACTION_WATCHDOG);
@@ -59,6 +67,10 @@ public class AndroidXPresenter {
         mContext.sendBroadcast(intent, RECEIVER_PERMISSION);
     }
 
+    /**
+     * 设置看门狗超时时长
+     * @param timeout
+     */
     public void setWatchdogTimeout(int timeout) {
         Intent intent = new Intent();
         intent.setAction(ACTION_WATCHDOG);

@@ -404,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     mOtherPresenter.screenOff();
                 }
+                break;
             case R.id.btn_fullscreen:
                 if (b) {
                     mOtherPresenter.fullScreen(this);

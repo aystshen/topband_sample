@@ -1,7 +1,10 @@
 package com.ayst.sample.items.other;
 
 import android.app.Activity;
+import android.app.Service;
+import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,6 +12,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ayst.utils.AppUtil;
 
@@ -81,10 +85,14 @@ public class OtherPresenter {
                     | PowerManager.ON_AFTER_RELEASE, "Sample:WakeLock");
         }
         mWakeLock.acquire();
+
+        Toast.makeText(mContext, "The screen has been turned on!",
+                Toast.LENGTH_SHORT).show();
     }
 
     /**
      * 灭屏
+     * 需要到设置->安全性和位置信息->设备管理应用中勾选Sample应用
      */
     public void screenOff() {
         if (null == mPowerManager) {
@@ -93,6 +101,16 @@ public class OtherPresenter {
                     | PowerManager.ON_AFTER_RELEASE, "Sample:WakeLock");
         }
         mWakeLock.release();
+
+        DevicePolicyManager policyManager = (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName adminReceiver = new ComponentName(mContext, ScreenOffAdminReceiver.class);
+        boolean admin = policyManager.isAdminActive(adminReceiver);
+        if (admin) {
+            policyManager.lockNow();
+        } else {
+            Toast.makeText(mContext, "No device admin permissions",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
