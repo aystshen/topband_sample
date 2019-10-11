@@ -76,6 +76,16 @@ public class OtherPresenter {
     }
 
     /**
+     * 恢复出厂设置
+     */
+    public void factoryReset() {
+        Intent intent = new Intent("android.intent.action.MASTER_CLEAR");
+        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        intent.putExtra("android.intent.extra.REASON", "MasterClearConfirm");
+        mContext.sendBroadcast(intent);
+    }
+
+    /**
      * 亮屏
      */
     public void screenOn() {

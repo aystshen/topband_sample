@@ -63,6 +63,12 @@
                     android:layout_height="wrap_content"
                     android:text="Shutdown" />
 
+                <Button
+                    android:id="@+id/btn_factory_reset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Factory Reset" />
+
                 <ToggleButton
                     android:id="@+id/btn_screen"
                     android:layout_width="wrap_content"

@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements
     Button mRebootBtn;
     @BindView(R.id.btn_shutdown)
     Button mShutdownBtn;
+    @BindView(R.id.btn_factory_reset)
+    Button mFactoryResetBtn;
     @BindView(R.id.btn_gpio)
     ToggleButton mGpioBtn;
     @BindView(R.id.btn_camera)
@@ -285,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements
     @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
-            R.id.btn_androidx_watchdog_timeout})
+            R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_root_test:
@@ -299,6 +301,9 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_shutdown:
                 mOtherPresenter.shutdown();
+                break;
+            case R.id.btn_factory_reset:
+                mOtherPresenter.factoryReset();
                 break;
             case R.id.btn_gpio:
                 if (mGpioPresenter.getMode() == GpioPresenter.Mode.OUTPUT) {
