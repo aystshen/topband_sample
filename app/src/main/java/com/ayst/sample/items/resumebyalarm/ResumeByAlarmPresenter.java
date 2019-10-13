@@ -9,7 +9,7 @@ import android.content.IntentFilter;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ayst.utils.AppUtil;
+import com.ayst.utils.AppUtils;
 
 import java.util.Calendar;
 
@@ -113,9 +113,9 @@ public class ResumeByAlarmPresenter {
             String action = intent.getAction();
             Log.i(TAG, "Alarm receiver action: " + action);
             if (TextUtils.equals(ACTION_TIMED_POWEROFF, action)) {
-                AppUtil.shutdown(mContext);
+                AppUtils.shutdown(mContext);
             } else if (TextUtils.equals(ACTION_TIMED_REBOOT, action)) {
-                AppUtil.reboot(mContext);
+                AppUtils.reboot(mContext);
             }
         }
     };

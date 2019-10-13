@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.ayst.utils.AppUtil;
+import com.ayst.utils.AppUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -111,7 +111,7 @@ public class CameraPresenter {
 
             StringBuilder sb = new StringBuilder();
             for (int i=0; i<cameraNumber; i++) {
-                String pidvid = AppUtil.getProperty("topband.dev.video" + i, "");
+                String pidvid = AppUtils.getProperty("topband.dev.video" + i, "");
                 if (!TextUtils.isEmpty(pidvid)) {
                     sb.append("video" + i + "(" + pidvid + ") ");
                 }

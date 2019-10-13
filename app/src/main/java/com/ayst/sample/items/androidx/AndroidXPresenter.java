@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.ayst.sample.items.watchdog.Mcu;
-import com.ayst.utils.AppUtil;
+import com.ayst.utils.AppUtils;
 
 public class AndroidXPresenter {
     private static final String TAG = "AndroidXPresenter";
@@ -35,7 +35,7 @@ public class AndroidXPresenter {
 
     public void start() {
         mAndroidXView.updateAndroidX4GState(TextUtils.equals("1",
-                AppUtil.getProperty("persist.androidx.4g_keep_live", "0")));
+                AppUtils.getProperty("persist.androidx.4g_keep_live", "0")));
         mAndroidXView.updateAndroidXWatchdogState(mMcu.watchdogIsOpen());
         mAndroidXView.updateAndroidXWatchdogTimeout(mMcu.getWatchdogDuration());
     }

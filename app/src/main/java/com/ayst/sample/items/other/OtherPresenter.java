@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.ayst.utils.AppUtil;
+import com.ayst.utils.AppUtils;
 
 import java.lang.reflect.Method;
 
@@ -66,14 +66,14 @@ public class OtherPresenter {
      * 重启
      */
     public void reboot() {
-        AppUtil.reboot(mContext);
+        AppUtils.reboot(mContext);
     }
 
     /**
      * 关机
      */
     public void shutdown() {
-        AppUtil.shutdown(mContext);
+        AppUtils.shutdown(mContext);
     }
 
     /**
