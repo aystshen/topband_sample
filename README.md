@@ -1,21 +1,30 @@
 # Topband Sample
 This sample is used for verification of the topband Android custom feature and includes the following features:
-- root
-- reboot/shutdown
-- silent install
-- camera
-- proximity sensor
-- accelerometer sensor
-- gyroscope sensor
-- adc sensor-><https://github.com/aystshen/Android-AdcSensor>
-- gpio-><https://github.com/aystshen/Android-GPIOControlDriver>
-- watchdog->-><https://github.com/aystshen/Android-TimedBootDriver>
-- power on/off by alarm-><https://github.com/aystshen/Android-TimedBootDriver>
+- Root
+- Reboot/Shutdown
+- Silent install
+- Factory reset
+- Screen on/off
+- Key
+- Full screen
+- Hide/show system bar
+- Camera
+- 4G keep live(AndroidX)
+- Watchdog(AndroidX)
+- Human sensor
+- Accelerometer sensor
+- Gyroscope sensor
+- Adc sensor-><https://github.com/aystshen/Android-AdcSensor>
+- Gpio-><https://github.com/aystshen/Android-GPIOControlDriver>
+- Watchdog->-><https://github.com/aystshen/Android-TimedBootDriver>
+- Power on/off by alarm-><https://github.com/aystshen/Android-TimedBootDriver>
 - 4G modem power on/off, wakeup/sleep, reset
-- usb transmission
+- A2dp sink
+- Usb transmission
 
 ## Preview
-![image](screenshots/Snipaste_2019-07-09_17-54-28.png) 
+![image](screenshots/device-2019-10-13-101252.png)   
+![image](screenshots/device-2019-10-13-101310.png) 
 
 ## Developed By
 * ayst.shen@foxmail.com
