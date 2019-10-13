@@ -1,7 +1,7 @@
 package com.ayst.sample.items.other;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Service;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.ayst.utils.AppUtil;
 
-import java.io.File;
+import java.lang.reflect.Method;
 
 import cn.trinea.android.common.util.ShellUtils;
 
@@ -31,6 +31,7 @@ public class OtherPresenter {
     public OtherPresenter(Context context, IOtherView view) {
         mContext = context;
         mOtherView = view;
+        activeAdmin(context);
     }
 
     public void start() {
@@ -113,7 +114,7 @@ public class OtherPresenter {
         mWakeLock.release();
 
         DevicePolicyManager policyManager = (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
-        ComponentName adminReceiver = new ComponentName(mContext, ScreenOffAdminReceiver.class);
+        ComponentName adminReceiver = new ComponentName(mContext, AdminReceiver.class);
         boolean admin = policyManager.isAdminActive(adminReceiver);
         if (admin) {
             policyManager.lockNow();
@@ -165,6 +166,19 @@ public class OtherPresenter {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.SYSTEM_BAR_SHOW");
         mContext.sendBroadcast(intent);
+    }
+
+    @SuppressLint("PrivateApi")
+    private static void activeAdmin(Context context) {
+        ComponentName adminReceiver = new ComponentName(context, AdminReceiver.class);
+        try {
+            DevicePolicyManager dpm = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+            Method setActiveAdmin = dpm.getClass().getDeclaredMethod("setActiveAdmin", ComponentName.class, boolean.class);
+            setActiveAdmin.setAccessible(true);
+            setActiveAdmin.invoke(dpm, adminReceiver, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void registerPackageChangeBroadcast() {
