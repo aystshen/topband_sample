@@ -751,6 +751,161 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="Audio" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_group"
+                android:orientation="vertical"
+                android:padding="3dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:id="@+id/btn_audio_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="100dp"
+                        android:textOff="Play"
+                        android:textOn="Stop" />
+
+                    <Spinner
+                        android:id="@+id/spn_audio_stream"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:entries="@array/audio_stream"/>
+
+                </LinearLayout>
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Voice Call:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_voice_call"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="System:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_system"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Ring:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_ring"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Music:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_music"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Alarm:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_alarm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Notification:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_notification"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Usb transmission" />
 
             <com.google.android.flexbox.FlexboxLayout
