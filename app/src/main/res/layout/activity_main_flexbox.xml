@@ -30,20 +30,19 @@
                 app:alignItems="stretch"
                 app:flexWrap="wrap">
 
-                <Button
+                <ToggleButton
+                    android:id="@+id/btn_tcp_adb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Tcp Adb"
+                    android:textOn="Tcp Adb" />
+
+                <ToggleButton
                     android:id="@+id/btn_root_test"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Root" />
-
-                <TextView
-                    android:id="@+id/tv_root_result"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center_vertical"
-                    android:text="--"
-                    android:textColor="@color/colorAccent" />
+                    android:textOff="Root"
+                    android:textOn="Root" />
 
                 <Button
                     android:id="@+id/btn_silent_install"

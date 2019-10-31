@@ -64,8 +64,10 @@ public class MainActivity extends AppCompatActivity implements
     private static final int TYPE_REBOOT = 2;
     private int mTimePickerType = TYPE_POWER_ON;
 
+    @BindView(R.id.btn_tcp_adb)
+    ToggleButton mTcpAdbBtn;
     @BindView(R.id.btn_root_test)
-    Button mRootTestBtn;
+    ToggleButton mRootTestBtn;
     @BindView(R.id.btn_silent_install)
     Button mSilentInstallBtn;
     @BindView(R.id.btn_reboot)
@@ -136,8 +138,6 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mModemWakeupBtn;
     @BindView(R.id.btn_modem_reset)
     Button mModemResetBtn;
-    @BindView(R.id.tv_root_result)
-    TextView mRootResultTv;
     @BindView(R.id.tv_human)
     TextView mHumanTv;
     @BindView(R.id.btn_screen)
@@ -246,6 +246,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initView() {
+        mTcpAdbBtn.setOnCheckedChangeListener(this);
+        mRootTestBtn.setOnCheckedChangeListener(this);
         mCameraBtn.setOnCheckedChangeListener(this);
         mWatchdogBtn.setOnCheckedChangeListener(this);
         mTimingPowerOnBtn.setOnCheckedChangeListener(this);
@@ -312,15 +314,12 @@ public class MainActivity extends AppCompatActivity implements
         mListenUsbBtn.setOnCheckedChangeListener(this);
     }
 
-    @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
+    @OnClick({R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
             R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_root_test:
-                mOtherPresenter.root();
-                break;
             case R.id.btn_silent_install:
                 mOtherPresenter.silentInstall("");
                 break;
@@ -371,6 +370,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch (compoundButton.getId()) {
+            case R.id.btn_tcp_adb:
+                if (b) {
+                    mOtherPresenter.openTcpAdb();
+                }
+                break;
+            case R.id.btn_root_test:
+                if (b) {
+                    mOtherPresenter.root();
+                }
+                break;
             case R.id.btn_camera:
                 if (b) {
                     mCameraPresenter.start();
@@ -562,8 +571,17 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void updateTcpAdbResult(boolean result) {
+        if (!result) {
+            mTcpAdbBtn.setChecked(false);
+        }
+    }
+
+    @Override
     public void updateRootResult(boolean result) {
-        mRootResultTv.setText(result ? "success" : "failed");
+        if (!result) {
+            mRootTestBtn.setChecked(false);
+        }
     }
 
     @Override

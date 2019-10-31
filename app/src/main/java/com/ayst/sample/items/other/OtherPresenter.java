@@ -42,6 +42,15 @@ public class OtherPresenter {
         unregisterPackageChangeBroadcast();
     }
 
+    public void openTcpAdb() {
+        AppUtils.setProperty("service.adb.tcp.port", "5555");
+
+        ShellUtils.CommandResult result1 = ShellUtils.execCommand("stop adbd", true);
+        ShellUtils.CommandResult result2 = ShellUtils.execCommand("start adbd", true);
+
+        mOtherView.updateTcpAdbResult(result1.errorMsg.isEmpty() && result2.errorMsg.isEmpty());
+    }
+
     /**
      * root权限测试
      */
