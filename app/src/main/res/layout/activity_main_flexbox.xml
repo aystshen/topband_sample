@@ -133,6 +133,20 @@
                     android:layout_height="wrap_content"
                     android:text="Watchdog Timeout" />
 
+                <ToggleButton
+                    android:id="@+id/btn_androidx_power_on_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Timing boot"
+                    android:textOn="Timing boot" />
+
+                <ToggleButton
+                    android:id="@+id/btn_androidx_power_off_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Timing shutdown"
+                    android:textOn="Timing shutdown" />
+
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView

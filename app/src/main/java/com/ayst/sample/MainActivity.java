@@ -160,6 +160,10 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mAndroidxWatchdogBtn;
     @BindView(R.id.btn_androidx_watchdog_timeout)
     Button mAndroidxWatchdogTimeoutBtn;
+    @BindView(R.id.btn_androidx_power_on_time)
+    ToggleButton mAndroidxPowerOnTimeBtn;
+    @BindView(R.id.btn_androidx_power_off_time)
+    ToggleButton mAndroidxPowerOffTimeBtn;
     @BindView(R.id.btn_audio_play)
     ToggleButton mAudioPlayBtn;
     @BindView(R.id.spn_audio_stream)
@@ -317,7 +321,8 @@ public class MainActivity extends AppCompatActivity implements
     @OnClick({R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
-            R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset})
+            R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset, R.id.btn_androidx_power_on_time,
+            R.id.btn_androidx_power_off_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_silent_install:
@@ -360,6 +365,10 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_androidx_watchdog:
                 mAndroidXPresenter.toggleWatchdog(mAndroidxWatchdogBtn.isChecked());
+                break;
+            case R.id.btn_androidx_power_on_time:
+                break;
+            case R.id.btn_androidx_power_off_time:
                 break;
             case R.id.btn_androidx_watchdog_timeout:
                 showWatchdogDurationPickerDialog(true);

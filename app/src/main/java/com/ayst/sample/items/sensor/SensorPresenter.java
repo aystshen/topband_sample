@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import java.util.List;
+
 public class SensorPresenter {
     private static final String TAG = "SensorPresenter";
 
