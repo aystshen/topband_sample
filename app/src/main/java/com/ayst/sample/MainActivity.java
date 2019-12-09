@@ -26,7 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ayst.sample.items.a2dpsink.A2dpSinkPresenter;
-import com.ayst.sample.items.a2dpsink.IA2dpSinkView;
+import com.ayst.sample.items.a2dpsink.IA2dpsinkView;
 import com.ayst.sample.items.androidx.AndroidXPresenter;
 import com.ayst.sample.items.androidx.IAndroidXView;
 import com.ayst.sample.items.audio.AudioPresenter;
@@ -34,7 +34,7 @@ import com.ayst.sample.items.backlight.BacklightPresenter;
 import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
 import com.ayst.sample.items.gpio.GpioPresenter;
-import com.ayst.sample.items.gpio.IGpioView;
+import com.ayst.sample.items.gpio.IGpioVIew;
 import com.ayst.sample.items.modem.IModemView;
 import com.ayst.sample.items.modem.ModemPresenter;
 import com.ayst.sample.items.other.IOtherView;
@@ -55,8 +55,8 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener, IOtherView,
-        ICameraView, ISensorView, IGpioView, IWatchdogView,
-        IModemView, IUsbView, IA2dpSinkView, SeekBar.OnSeekBarChangeListener, IAndroidXView {
+        ICameraView, ISensorView, IGpioVIew, IWatchdogView,
+        IModemView, IUsbView, IA2dpsinkView, SeekBar.OnSeekBarChangeListener, IAndroidXView {
     private static final String TAG = "Sample";
 
     private static final int TYPE_POWER_ON = 0;

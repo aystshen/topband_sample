@@ -19,9 +19,9 @@ public class A2dpSinkPresenter {
             "android.bluetooth.avrcp-controller.profile.extra.PLAYBACK";
 
     private Context mContext;
-    private IA2dpSinkView mA2dpSinkView;
+    private IA2dpsinkView mA2dpSinkView;
 
-    public A2dpSinkPresenter(Context context, IA2dpSinkView view) {
+    public A2dpSinkPresenter(Context context, IA2dpsinkView view) {
         mContext = context;
         mA2dpSinkView = view;
     }

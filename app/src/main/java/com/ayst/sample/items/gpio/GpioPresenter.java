@@ -8,7 +8,7 @@ public class GpioPresenter {
     private static final String TAG = "GpioPresenter";
 
     private Context mContext;
-    private IGpioView mGpioView;
+    private IGpioVIew mGpioView;
     private int mSelectedGpio;
     private Gpio mGpio;
     private Mode mMode;
@@ -34,7 +34,7 @@ public class GpioPresenter {
         KEY
     }
 
-    public GpioPresenter(Context context, IGpioView view) {
+    public GpioPresenter(Context context, IGpioVIew view) {
         mContext = context;
         mGpioView = view;
         mGpio = new Gpio(context);
