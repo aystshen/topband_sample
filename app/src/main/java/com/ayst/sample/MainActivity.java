@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
     private static final int TYPE_REBOOT = 2;
+    @BindView(R.id.tv_light)
+    TextView mLightTv;
     private int mTimePickerType = TYPE_POWER_ON;
 
     @BindView(R.id.btn_tcp_adb)
@@ -180,6 +182,8 @@ public class MainActivity extends AppCompatActivity implements
     SeekBar mAudioAlarmSeekbar;
     @BindView(R.id.seekbar_audio_notification)
     SeekBar mAudioNotificationSeekbar;
+    @BindView(R.id.spn_otg_mode)
+    Spinner mOtgModeSpn;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -316,6 +320,18 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         mListenUsbBtn.setOnCheckedChangeListener(this);
+
+        mOtgModeSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mAndroidXPresenter.setOtgMode(position + "");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @OnClick({R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
@@ -634,6 +650,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void updateLightSensorData(float value) {
+        mLightTv.setText(value + "");
+    }
+
+    @Override
     public void updateGpioStatus(boolean level) {
         mGpioBtn.setChecked(level);
     }
@@ -698,5 +719,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateAndroidXWatchdogTimeout(int timeout) {
         mAndroidxWatchdogTimeoutBtn.setText("Watchdog Timeout: " + timeout + " s");
+    }
+
+    @Override
+    public void updateAndroidXOtgMode(String mode) {
+        mOtgModeSpn.setSelection(Integer.parseInt(mode));
     }
 }

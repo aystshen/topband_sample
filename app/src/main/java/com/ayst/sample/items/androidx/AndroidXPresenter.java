@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.ayst.androidx.IModemService;
+import com.ayst.androidx.IOtgService;
 import com.ayst.androidx.IWatchdogService;
 
 public class AndroidXPresenter {
@@ -17,11 +18,13 @@ public class AndroidXPresenter {
     private static final String ANDROIDX_PACKAGE_NAME = "com.ayst.androidx";
     private static final String ACTION_MODEM_SERVICE = "com.ayst.androidx.MODEM_SERVICE";
     private static final String ACTION_WATCHDOG_SERVICE = "com.ayst.androidx.WATCHDOG_SERVICE";
+    private static final String ACTION_OTG_SERVICE = "com.ayst.androidx.OTG_SERVICE";
 
     private Context mContext;
     private IAndroidXView mAndroidXView;
     private IModemService mModemService;
     private IWatchdogService mWatchdogService;
+    private IOtgService mOtgService;
 
     public AndroidXPresenter(Context context, IAndroidXView view) {
         mContext = context;
@@ -38,11 +41,17 @@ public class AndroidXPresenter {
         intent1.setPackage(ANDROIDX_PACKAGE_NAME);
         intent1.setAction(ACTION_WATCHDOG_SERVICE);
         mContext.bindService(intent1, mWatchdogServiceConnection, Context.BIND_AUTO_CREATE);
+
+        Intent intent2 = new Intent();
+        intent2.setPackage(ANDROIDX_PACKAGE_NAME);
+        intent2.setAction(ACTION_OTG_SERVICE);
+        mContext.bindService(intent2, mOtgServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     public void stop() {
         mContext.unbindService(mModemServiceConnection);
         mContext.unbindService(mWatchdogServiceConnection);
+        mContext.unbindService(mOtgServiceConnection);
     }
 
     private ServiceConnection mModemServiceConnection = new ServiceConnection() {
@@ -83,6 +92,26 @@ public class AndroidXPresenter {
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "IWatchdogService, onServiceDisconnected...");
             mWatchdogService = null;
+        }
+    };
+
+    private ServiceConnection mOtgServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "IOtgService, onServiceConnected...");
+
+            mOtgService = IOtgService.Stub.asInterface(service);
+            try {
+                mAndroidXView.updateAndroidXOtgMode(mOtgService.getOtgMode());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "IOtgService, onServiceDisconnected...");
+            mOtgService = null;
         }
     };
 
@@ -139,5 +168,29 @@ public class AndroidXPresenter {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void setOtgMode(String mode) {
+        if (null != mOtgService) {
+            try {
+                if (!mOtgService.setOtgMode(mode)) {
+                    mAndroidXView.updateAndroidXOtgMode(mOtgService.getOtgMode());
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getOtgMode() {
+        if (null != mOtgService) {
+            try {
+                return mOtgService.getOtgMode();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return "0";
     }
 }

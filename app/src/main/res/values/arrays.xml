@@ -10,4 +10,10 @@
         <item>STREAM_NOTIFICATION</item>
     </array>
 
+    <array name="otg_mode">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"2"</item>
+    </array>
+
 </resources>
