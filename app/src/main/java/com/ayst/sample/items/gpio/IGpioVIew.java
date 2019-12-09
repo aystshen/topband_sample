@@ -1,5 +1,5 @@
 package com.ayst.sample.items.gpio;
 
-public interface IGpioVIew {
+public interface IGpioView {
     void updateGpioStatus(boolean level);
 }
