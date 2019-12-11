@@ -5,4 +5,5 @@ public interface ISensorView {
     void updateGyroSensorData(float x, float y, float z);
     void updateAdcSensorData(float value);
     void updateHumanSensorData(float value);
+    void updateLightSensorData(float value);
 }

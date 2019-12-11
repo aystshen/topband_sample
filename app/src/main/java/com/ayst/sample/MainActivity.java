@@ -29,6 +29,7 @@ import com.ayst.sample.items.a2dpsink.A2dpSinkPresenter;
 import com.ayst.sample.items.a2dpsink.IA2dpSinkView;
 import com.ayst.sample.items.androidx.AndroidXPresenter;
 import com.ayst.sample.items.androidx.IAndroidXView;
+import com.ayst.sample.items.audio.AudioPresenter;
 import com.ayst.sample.items.backlight.BacklightPresenter;
 import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
@@ -61,10 +62,14 @@ public class MainActivity extends AppCompatActivity implements
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
     private static final int TYPE_REBOOT = 2;
+    @BindView(R.id.tv_light)
+    TextView mLightTv;
     private int mTimePickerType = TYPE_POWER_ON;
 
+    @BindView(R.id.btn_tcp_adb)
+    ToggleButton mTcpAdbBtn;
     @BindView(R.id.btn_root_test)
-    Button mRootTestBtn;
+    ToggleButton mRootTestBtn;
     @BindView(R.id.btn_silent_install)
     Button mSilentInstallBtn;
     @BindView(R.id.btn_reboot)
@@ -135,8 +140,6 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mModemWakeupBtn;
     @BindView(R.id.btn_modem_reset)
     Button mModemResetBtn;
-    @BindView(R.id.tv_root_result)
-    TextView mRootResultTv;
     @BindView(R.id.tv_human)
     TextView mHumanTv;
     @BindView(R.id.btn_screen)
@@ -159,6 +162,28 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mAndroidxWatchdogBtn;
     @BindView(R.id.btn_androidx_watchdog_timeout)
     Button mAndroidxWatchdogTimeoutBtn;
+    @BindView(R.id.btn_androidx_power_on_time)
+    ToggleButton mAndroidxPowerOnTimeBtn;
+    @BindView(R.id.btn_androidx_power_off_time)
+    ToggleButton mAndroidxPowerOffTimeBtn;
+    @BindView(R.id.btn_audio_play)
+    ToggleButton mAudioPlayBtn;
+    @BindView(R.id.spn_audio_stream)
+    Spinner mAudioStreamSpn;
+    @BindView(R.id.seekbar_audio_voice_call)
+    SeekBar mAudioVoiceCallSeekbar;
+    @BindView(R.id.seekbar_audio_system)
+    SeekBar mAudioSystemSeekbar;
+    @BindView(R.id.seekbar_audio_ring)
+    SeekBar mAudioRingSeekbar;
+    @BindView(R.id.seekbar_audio_music)
+    SeekBar mAudioMusicSeekbar;
+    @BindView(R.id.seekbar_audio_alarm)
+    SeekBar mAudioAlarmSeekbar;
+    @BindView(R.id.seekbar_audio_notification)
+    SeekBar mAudioNotificationSeekbar;
+    @BindView(R.id.spn_otg_mode)
+    Spinner mOtgModeSpn;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -171,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements
     private A2dpSinkPresenter mA2dpSinkPresenter;
     private BacklightPresenter mBacklightPresenter;
     private AndroidXPresenter mAndroidXPresenter;
+    private AudioPresenter mAudioPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements
         mA2dpSinkPresenter = new A2dpSinkPresenter(this, this);
         mBacklightPresenter = new BacklightPresenter(this);
         mAndroidXPresenter = new AndroidXPresenter(this, this);
+        mAudioPresenter = new AudioPresenter(this);
 
         initView();
     }
@@ -227,6 +254,8 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void initView() {
+        mTcpAdbBtn.setOnCheckedChangeListener(this);
+        mRootTestBtn.setOnCheckedChangeListener(this);
         mCameraBtn.setOnCheckedChangeListener(this);
         mWatchdogBtn.setOnCheckedChangeListener(this);
         mTimingPowerOnBtn.setOnCheckedChangeListener(this);
@@ -235,8 +264,17 @@ public class MainActivity extends AppCompatActivity implements
         mScreenBtn.setOnCheckedChangeListener(this);
         mFullscreenBtn.setOnCheckedChangeListener(this);
         mSystembarBtn.setOnCheckedChangeListener(this);
+        mAudioPlayBtn.setOnCheckedChangeListener(this);
+
         mMainBacklightSeekbar.setOnSeekBarChangeListener(this);
         mSubBacklightSeekbar.setOnSeekBarChangeListener(this);
+
+        mAudioVoiceCallSeekbar.setOnSeekBarChangeListener(this);
+        mAudioSystemSeekbar.setOnSeekBarChangeListener(this);
+        mAudioRingSeekbar.setOnSeekBarChangeListener(this);
+        mAudioMusicSeekbar.setOnSeekBarChangeListener(this);
+        mAudioAlarmSeekbar.setOnSeekBarChangeListener(this);
+        mAudioNotificationSeekbar.setOnSeekBarChangeListener(this);
 
         // init gpio
         if (mGpioPresenter.getNumber() > 0) {
@@ -282,17 +320,27 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         mListenUsbBtn.setOnCheckedChangeListener(this);
+
+        mOtgModeSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mAndroidXPresenter.setOtgMode(position + "");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
-    @OnClick({R.id.btn_root_test, R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
+    @OnClick({R.id.btn_silent_install, R.id.btn_reboot, R.id.btn_shutdown,
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
-            R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset})
+            R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset, R.id.btn_androidx_power_on_time,
+            R.id.btn_androidx_power_off_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_root_test:
-                mOtherPresenter.root();
-                break;
             case R.id.btn_silent_install:
                 mOtherPresenter.silentInstall("");
                 break;
@@ -334,6 +382,10 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.btn_androidx_watchdog:
                 mAndroidXPresenter.toggleWatchdog(mAndroidxWatchdogBtn.isChecked());
                 break;
+            case R.id.btn_androidx_power_on_time:
+                break;
+            case R.id.btn_androidx_power_off_time:
+                break;
             case R.id.btn_androidx_watchdog_timeout:
                 showWatchdogDurationPickerDialog(true);
                 break;
@@ -343,6 +395,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         switch (compoundButton.getId()) {
+            case R.id.btn_tcp_adb:
+                if (b) {
+                    mOtherPresenter.openTcpAdb();
+                }
+                break;
+            case R.id.btn_root_test:
+                if (b) {
+                    mOtherPresenter.root();
+                }
+                break;
             case R.id.btn_camera:
                 if (b) {
                     mCameraPresenter.start();
@@ -424,6 +486,13 @@ public class MainActivity extends AppCompatActivity implements
                     mOtherPresenter.showSystemBar();
                 }
                 break;
+            case R.id.btn_audio_play:
+                if (b) {
+                    mAudioPresenter.play(mAudioStreamSpn.getSelectedItemPosition());
+                } else {
+                    mAudioPresenter.stop();
+                }
+                break;
         }
     }
 
@@ -445,6 +514,24 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.seekbar_sub_backlight:
                 mBacklightPresenter.setSubBrightness(seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_voice_call:
+                mAudioPresenter.setVolume(0, seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_system:
+                mAudioPresenter.setVolume(1, seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_ring:
+                mAudioPresenter.setVolume(2, seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_music:
+                mAudioPresenter.setVolume(3, seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_alarm:
+                mAudioPresenter.setVolume(4, seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_notification:
+                mAudioPresenter.setVolume(5, seekBar.getProgress());
                 break;
         }
     }
@@ -509,8 +596,17 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void updateTcpAdbResult(boolean result) {
+        if (!result) {
+            mTcpAdbBtn.setChecked(false);
+        }
+    }
+
+    @Override
     public void updateRootResult(boolean result) {
-        mRootResultTv.setText(result ? "success" : "failed");
+        if (!result) {
+            mRootTestBtn.setChecked(false);
+        }
     }
 
     @Override
@@ -551,6 +647,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateHumanSensorData(float value) {
         mHumanTv.setText(value + "");
+    }
+
+    @Override
+    public void updateLightSensorData(float value) {
+        mLightTv.setText(value + "");
     }
 
     @Override
@@ -618,5 +719,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateAndroidXWatchdogTimeout(int timeout) {
         mAndroidxWatchdogTimeoutBtn.setText("Watchdog Timeout: " + timeout + " s");
+    }
+
+    @Override
+    public void updateAndroidXOtgMode(String mode) {
+        mOtgModeSpn.setSelection(Integer.parseInt(mode));
     }
 }

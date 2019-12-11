@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -452,9 +453,16 @@ public class AppUtils {
      * @param context
      */
     public static void shutdown(Context context) {
-        Intent intent = new Intent("com.android.internal.intent.action.REQUEST_SHUTDOWN");
-        intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Intent intent = new Intent("com.android.internal.intent.action.REQUEST_SHUTDOWN");
+            intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } else {
+            Intent intent = new Intent("android.intent.action.ACTION_REQUEST_SHUTDOWN");
+            intent.putExtra("android.intent.extra.KEY_CONFIRM", false);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
     }
 }

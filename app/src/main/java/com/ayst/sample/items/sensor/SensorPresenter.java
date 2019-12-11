@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
+import java.util.List;
+
 public class SensorPresenter {
     private static final String TAG = "SensorPresenter";
 
@@ -17,6 +19,7 @@ public class SensorPresenter {
     private SensorEventListener mGyroSensorEventListener;
     private SensorEventListener mAdcSensorEventListener;
     private SensorEventListener mHumanSensorEventListener;
+    private SensorEventListener mLightSensorEventListener;
 
     public SensorPresenter(Context context, ISensorView view) {
         mContext = context;
@@ -103,6 +106,27 @@ public class SensorPresenter {
                 mSensorManager.registerListener(mHumanSensorEventListener, humanSensor, SensorManager.SENSOR_DELAY_NORMAL);
             } else {
                 Log.e(TAG, "humanSensor is null");
+            }
+
+            // Human Sensor
+            Sensor lightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+            if (lightSensor != null) {
+                Log.e(TAG, "lightSensor>>>>");
+                mLightSensorEventListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+                        float light = event.values[0];
+                        mSensorView.updateLightSensorData(light);
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+                mSensorManager.registerListener(mLightSensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Log.e(TAG, "lightSensor is null");
             }
         }
     }

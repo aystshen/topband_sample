@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <array name="audio_stream">
+        <item>STREAM_VOICE_CALL</item>
+        <item>STREAM_SYSTEM</item>
+        <item>STREAM_RING</item>
+        <item>STREAM_MUSIC</item>
+        <item>STREAM_ALARM</item>
+        <item>STREAM_NOTIFICATION</item>
+    </array>
+
+    <array name="otg_mode">
+        <item>"0"</item>
+        <item>"1"</item>
+        <item>"2"</item>
+    </array>
+
 </resources>

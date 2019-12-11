@@ -30,20 +30,19 @@
                 app:alignItems="stretch"
                 app:flexWrap="wrap">
 
-                <Button
+                <ToggleButton
+                    android:id="@+id/btn_tcp_adb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Tcp Adb"
+                    android:textOn="Tcp Adb" />
+
+                <ToggleButton
                     android:id="@+id/btn_root_test"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Root" />
-
-                <TextView
-                    android:id="@+id/tv_root_result"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center_vertical"
-                    android:text="--"
-                    android:textColor="@color/colorAccent" />
+                    android:textOff="Root"
+                    android:textOn="Root" />
 
                 <Button
                     android:id="@+id/btn_silent_install"
@@ -134,6 +133,39 @@
                     android:layout_height="wrap_content"
                     android:text="Watchdog Timeout" />
 
+                <ToggleButton
+                    android:id="@+id/btn_androidx_power_on_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Timing boot"
+                    android:textOn="Timing boot" />
+
+                <ToggleButton
+                    android:id="@+id/btn_androidx_power_off_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Timing shutdown"
+                    android:textOn="Timing shutdown" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="OTG Mode:"
+                        android:textColor="@color/black" />
+
+                    <Spinner
+                        android:id="@+id/spn_otg_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:entries="@array/otg_mode"/>
+                </LinearLayout>
+
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView
@@ -217,6 +249,45 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
+
+                </LinearLayout>
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Light Sensor" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_group"
+                android:padding="3dp"
+                app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="light:"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_light"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="--"
+                        android:textColor="@color/colorAccent" />
 
                 </LinearLayout>
 
@@ -746,6 +817,161 @@
                     android:textColor="@color/colorAccent" />
 
             </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Audio" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_group"
+                android:orientation="vertical"
+                android:padding="3dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:id="@+id/btn_audio_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="100dp"
+                        android:textOff="Play"
+                        android:textOn="Stop" />
+
+                    <Spinner
+                        android:id="@+id/spn_audio_stream"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:entries="@array/audio_stream"/>
+
+                </LinearLayout>
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Voice Call:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_voice_call"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="System:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_system"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Ring:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_ring"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Music:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_music"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Alarm:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_alarm"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="Notification:"
+                            android:textColor="@color/black" />
+
+                        <SeekBar
+                            android:id="@+id/seekbar_audio_notification"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_marginTop="5dp"
+                            android:max="100"
+                            android:minWidth="200dp"
+                            android:progress="50" />
+                    </TableRow>
+                </TableLayout>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
