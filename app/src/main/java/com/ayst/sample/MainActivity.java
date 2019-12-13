@@ -2,8 +2,11 @@ package com.ayst.sample;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.location.GpsStatus;
+import android.location.Location;
 import android.media.MediaMetadata;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,6 +38,8 @@ import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
 import com.ayst.sample.items.gpio.GpioPresenter;
 import com.ayst.sample.items.gpio.IGpioView;
+import com.ayst.sample.items.gps.GpsPresenter;
+import com.ayst.sample.items.gps.IGpsView;
 import com.ayst.sample.items.modem.IModemView;
 import com.ayst.sample.items.modem.ModemPresenter;
 import com.ayst.sample.items.other.IOtherView;
@@ -56,7 +61,8 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements
         CompoundButton.OnCheckedChangeListener, IOtherView,
         ICameraView, ISensorView, IGpioView, IWatchdogView,
-        IModemView, IUsbView, IA2dpSinkView, SeekBar.OnSeekBarChangeListener, IAndroidXView {
+        IModemView, IUsbView, IA2dpSinkView, SeekBar.OnSeekBarChangeListener, IAndroidXView
+        , IGpsView {
     private static final String TAG = "Sample";
 
     private static final int TYPE_POWER_ON = 0;
@@ -184,6 +190,14 @@ public class MainActivity extends AppCompatActivity implements
     SeekBar mAudioNotificationSeekbar;
     @BindView(R.id.spn_otg_mode)
     Spinner mOtgModeSpn;
+    @BindView(R.id.btn_gps_status)
+    ToggleButton mGpsStatusBtn;
+    @BindView(R.id.tv_gps_Latitude)
+    TextView mGpsLattitudeTv;
+    @BindView(R.id.tv_gps_Longitude)
+    TextView mGpsLongitudeTv;
+    @BindView(R.id.tv_gps_Number)
+    TextView mGpsNumberTv;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -197,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements
     private BacklightPresenter mBacklightPresenter;
     private AndroidXPresenter mAndroidXPresenter;
     private AudioPresenter mAudioPresenter;
+    private GpsPresenter mGpsPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements
         mBacklightPresenter = new BacklightPresenter(this);
         mAndroidXPresenter = new AndroidXPresenter(this, this);
         mAudioPresenter = new AudioPresenter(this);
+        mGpsPresenter = new GpsPresenter(this,this);
 
         initView();
     }
@@ -233,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements
         mWatchdogPresenter.start();
         mAndroidXPresenter.start();
         mOtherPresenter.start();
+        mGpsPresenter.start();
     }
 
     @Override
@@ -246,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements
         mWatchdogPresenter.stop();
         mAndroidXPresenter.stop();
         mOtherPresenter.stop();
+        mGpsPresenter.stop();
     }
 
     @Override
@@ -265,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements
         mFullscreenBtn.setOnCheckedChangeListener(this);
         mSystembarBtn.setOnCheckedChangeListener(this);
         mAudioPlayBtn.setOnCheckedChangeListener(this);
+        mGpsStatusBtn.setOnCheckedChangeListener(this);
 
         mMainBacklightSeekbar.setOnSeekBarChangeListener(this);
         mSubBacklightSeekbar.setOnSeekBarChangeListener(this);
@@ -493,6 +512,14 @@ public class MainActivity extends AppCompatActivity implements
                     mAudioPresenter.stop();
                 }
                 break;
+            case R.id.btn_gps_status:
+                if(b)
+                {
+                    //Settings.Secure.setLocationProviderEnabled(resolver,
+                      //      LocationManager.GPS_PROVIDER, !enabled);
+                }else {
+
+                }
         }
     }
 
@@ -724,5 +751,24 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateAndroidXOtgMode(String mode) {
         mOtgModeSpn.setSelection(Integer.parseInt(mode));
+    }
+
+    @Override
+    public void updateGpsEnableStatus(Boolean status) {
+        mGpsStatusBtn.setChecked(status);
+    }
+
+    @Override
+    public void updateLocation(Location location) {
+        mGpsLattitudeTv.setText(""+location.getLatitude());
+        mGpsLongitudeTv.setText(""+location.getLongitude());
+
+
+    }
+
+    @Override
+    public void updateSatellitesCount(int count) {
+        Log.d("ddd","mGpsNumberTv = "+count);
+        mGpsNumberTv.setText(""+count);
     }
 }
