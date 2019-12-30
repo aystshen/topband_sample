@@ -170,6 +170,14 @@ public class AndroidXPresenter {
         }
     }
 
+    /**
+     * 调otg口usb工作模式
+     *
+     * @param mode
+     *      0：auto，由硬件决定
+     *      1：host，usb模式
+     *      2：device，otg调试模式
+     */
     public void setOtgMode(String mode) {
         if (null != mOtgService) {
             try {
@@ -182,6 +190,14 @@ public class AndroidXPresenter {
         }
     }
 
+    /**
+     * 获取当前otg模式
+     *
+     * @return
+     *      0：auto，由硬件决定
+     *      1：host，usb模式
+     *      2：device，otg调试模式
+     */
     public String getOtgMode() {
         if (null != mOtgService) {
             try {
