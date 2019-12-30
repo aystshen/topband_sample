@@ -1,6 +1,5 @@
 package com.ayst.sample.items.gps;
 
-import android.location.GpsStatus;
 import android.location.Location;
 
 public interface IGpsView {

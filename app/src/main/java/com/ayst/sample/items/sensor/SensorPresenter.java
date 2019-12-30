@@ -108,7 +108,7 @@ public class SensorPresenter {
                 Log.e(TAG, "humanSensor is null");
             }
 
-            // Human Sensor
+            // Light Sensor
             Sensor lightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
             if (lightSensor != null) {
                 Log.e(TAG, "lightSensor>>>>");

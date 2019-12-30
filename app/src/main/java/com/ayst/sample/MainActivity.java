@@ -2,11 +2,9 @@ package com.ayst.sample;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.media.MediaMetadata;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -68,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
     private static final int TYPE_REBOOT = 2;
-    @BindView(R.id.tv_light)
-    TextView mLightTv;
     private int mTimePickerType = TYPE_POWER_ON;
 
     @BindView(R.id.btn_tcp_adb)
@@ -192,12 +188,14 @@ public class MainActivity extends AppCompatActivity implements
     Spinner mOtgModeSpn;
     @BindView(R.id.btn_gps_status)
     ToggleButton mGpsStatusBtn;
-    @BindView(R.id.tv_gps_Latitude)
+    @BindView(R.id.tv_gps_latitude)
     TextView mGpsLattitudeTv;
-    @BindView(R.id.tv_gps_Longitude)
+    @BindView(R.id.tv_gps_longitude)
     TextView mGpsLongitudeTv;
-    @BindView(R.id.tv_gps_Number)
+    @BindView(R.id.tv_gps_number)
     TextView mGpsNumberTv;
+    @BindView(R.id.tv_light)
+    TextView mLightTv;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -233,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements
         mBacklightPresenter = new BacklightPresenter(this);
         mAndroidXPresenter = new AndroidXPresenter(this, this);
         mAudioPresenter = new AudioPresenter(this);
-        mGpsPresenter = new GpsPresenter(this,this);
+        mGpsPresenter = new GpsPresenter(this, this);
 
         initView();
     }
@@ -752,15 +750,12 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void updateLocation(Location location) {
-        mGpsLattitudeTv.setText(""+location.getLatitude());
-        mGpsLongitudeTv.setText(""+location.getLongitude());
-
-
+        mGpsLattitudeTv.setText("" + location.getLatitude());
+        mGpsLongitudeTv.setText("" + location.getLongitude());
     }
 
     @Override
     public void updateSatellitesCount(int count) {
-        Log.d("ddd","mGpsNumberTv = "+count);
-        mGpsNumberTv.setText(""+count);
+        mGpsNumberTv.setText("" + count);
     }
 }

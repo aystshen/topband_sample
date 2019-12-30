@@ -148,9 +148,9 @@
                     android:textOn="Timing shutdown" />
 
                 <LinearLayout
-                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -162,8 +162,8 @@
                         android:id="@+id/spn_otg_mode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:entries="@array/otg_mode"/>
+                        android:entries="@array/otg_mode"
+                        android:gravity="center_vertical" />
                 </LinearLayout>
 
             </com.google.android.flexbox.FlexboxLayout>
@@ -538,6 +538,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="GPS" />
+
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -546,12 +547,14 @@
                 app:alignContent="stretch"
                 app:alignItems="stretch"
                 app:flexWrap="wrap">
+
                 <ToggleButton
                     android:id="@+id/btn_gps_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textOff="GPS"
                     android:textOn="GPS" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -565,7 +568,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tv_gps_Latitude"
+                        android:id="@+id/tv_gps_latitude"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -573,9 +576,11 @@
                         android:textColor="@color/colorAccent" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -586,7 +591,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tv_gps_Longitude"
+                        android:id="@+id/tv_gps_longitude"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -594,9 +599,11 @@
                         android:textColor="@color/colorAccent" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -607,7 +614,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tv_gps_Number"
+                        android:id="@+id/tv_gps_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -616,6 +623,7 @@
 
                 </LinearLayout>
             </com.google.android.flexbox.FlexboxLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -931,8 +939,8 @@
                         android:id="@+id/spn_audio_stream"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:entries="@array/audio_stream"/>
+                        android:entries="@array/audio_stream"
+                        android:gravity="center_vertical" />
 
                 </LinearLayout>
 
