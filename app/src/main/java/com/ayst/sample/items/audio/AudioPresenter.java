@@ -20,7 +20,9 @@ public class AudioPresenter implements MediaPlayer.OnPreparedListener {
                                                 AudioManager.STREAM_RING,
                                                 AudioManager.STREAM_MUSIC,
                                                 AudioManager.STREAM_ALARM,
-                                                AudioManager.STREAM_NOTIFICATION};
+                                                AudioManager.STREAM_NOTIFICATION,
+                                                11,
+                                                12};
 
     public AudioPresenter(Context context) {
         mContext = context;

@@ -184,6 +184,10 @@ public class MainActivity extends AppCompatActivity implements
     SeekBar mAudioAlarmSeekbar;
     @BindView(R.id.seekbar_audio_notification)
     SeekBar mAudioNotificationSeekbar;
+    @BindView(R.id.seekbar_audio_custom1)
+    SeekBar mAudioCustom1Seekbar;
+    @BindView(R.id.seekbar_audio_custom2)
+    SeekBar mAudioCustom2Seekbar;
     @BindView(R.id.spn_otg_mode)
     Spinner mOtgModeSpn;
     @BindView(R.id.btn_gps_status)
@@ -292,6 +296,8 @@ public class MainActivity extends AppCompatActivity implements
         mAudioMusicSeekbar.setOnSeekBarChangeListener(this);
         mAudioAlarmSeekbar.setOnSeekBarChangeListener(this);
         mAudioNotificationSeekbar.setOnSeekBarChangeListener(this);
+        mAudioCustom1Seekbar.setOnSeekBarChangeListener(this);
+        mAudioCustom2Seekbar.setOnSeekBarChangeListener(this);
 
         // init gpio
         if (mGpioPresenter.getNumber() > 0) {
@@ -549,6 +555,12 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.seekbar_audio_notification:
                 mAudioPresenter.setVolume(5, seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_custom1:
+                mAudioPresenter.setVolume(6, seekBar.getProgress());
+                break;
+            case R.id.seekbar_audio_custom2:
+                mAudioPresenter.setVolume(7, seekBar.getProgress());
                 break;
         }
     }
