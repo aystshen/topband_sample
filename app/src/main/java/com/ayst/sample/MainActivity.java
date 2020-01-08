@@ -752,7 +752,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void updateAndroidXOtgMode(String mode) {
-        mOtgModeSpn.setSelection(Integer.parseInt(mode));
+        if (!TextUtils.isEmpty(mode)) {
+            mOtgModeSpn.setSelection(Integer.parseInt(mode));
+        } else {
+            mOtgModeSpn.setSelection(0);
+        }
     }
 
     @Override
