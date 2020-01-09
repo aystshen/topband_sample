@@ -1,4 +1,7 @@
 # Topband Sample
+
+[![](https://img.shields.io/badge/downloads-apk-brightgreen.svg)](https://fir.im/1a4h)
+
 This sample is used for verification of the topband Android custom feature and includes the following features:
 - Root
 - Reboot/Shutdown
