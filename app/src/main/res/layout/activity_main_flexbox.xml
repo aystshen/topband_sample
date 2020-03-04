@@ -114,6 +114,13 @@
                 app:flexWrap="wrap">
 
                 <ToggleButton
+                    android:id="@+id/btn_androidx_key_intercept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Key Intercept"
+                    android:textOn="Key Intercept" />
+
+                <ToggleButton
                     android:id="@+id/btn_androidx_4g"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

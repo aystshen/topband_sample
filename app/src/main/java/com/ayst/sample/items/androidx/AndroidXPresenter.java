@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.ayst.androidx.IKeyInterceptService;
 import com.ayst.androidx.IModemService;
 import com.ayst.androidx.IOtgService;
 import com.ayst.androidx.IWatchdogService;
@@ -19,12 +20,14 @@ public class AndroidXPresenter {
     private static final String ACTION_MODEM_SERVICE = "com.ayst.androidx.MODEM_SERVICE";
     private static final String ACTION_WATCHDOG_SERVICE = "com.ayst.androidx.WATCHDOG_SERVICE";
     private static final String ACTION_OTG_SERVICE = "com.ayst.androidx.OTG_SERVICE";
+    private static final String ACTION_KEY_INTERCEPT_SERVICE = "com.ayst.androidx.KEY_INTERCEPT_SERVICE";
 
     private Context mContext;
     private IAndroidXView mAndroidXView;
     private IModemService mModemService;
     private IWatchdogService mWatchdogService;
     private IOtgService mOtgService;
+    private IKeyInterceptService mIKeyInterceptService;
 
     public AndroidXPresenter(Context context, IAndroidXView view) {
         mContext = context;
@@ -46,12 +49,18 @@ public class AndroidXPresenter {
         intent2.setPackage(ANDROIDX_PACKAGE_NAME);
         intent2.setAction(ACTION_OTG_SERVICE);
         mContext.bindService(intent2, mOtgServiceConnection, Context.BIND_AUTO_CREATE);
+
+        Intent intent3 = new Intent();
+        intent3.setPackage(ANDROIDX_PACKAGE_NAME);
+        intent3.setAction(ACTION_KEY_INTERCEPT_SERVICE);
+        mContext.bindService(intent3, mKeyInterceptServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     public void stop() {
         mContext.unbindService(mModemServiceConnection);
         mContext.unbindService(mWatchdogServiceConnection);
         mContext.unbindService(mOtgServiceConnection);
+        mContext.unbindService(mKeyInterceptServiceConnection);
     }
 
     private ServiceConnection mModemServiceConnection = new ServiceConnection() {
@@ -112,6 +121,26 @@ public class AndroidXPresenter {
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "IOtgService, onServiceDisconnected...");
             mOtgService = null;
+        }
+    };
+
+    private ServiceConnection mKeyInterceptServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "IKeyInterceptService, onServiceConnected...");
+
+            mIKeyInterceptService = IKeyInterceptService.Stub.asInterface(service);
+            try {
+                mAndroidXView.updateAndroidXKeyIntercept(mIKeyInterceptService.isOpen());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "IKeyInterceptService, onServiceDisconnected...");
+            mIKeyInterceptService = null;
         }
     };
 
@@ -208,5 +237,24 @@ public class AndroidXPresenter {
         }
 
         return "0";
+    }
+
+    /**
+     * 打开、关闭键值拦截
+     *
+     * @param on
+     */
+    public void toggleKeyIntercept(boolean on) {
+        if (null != mIKeyInterceptService) {
+            try {
+                if (on) {
+                    mIKeyInterceptService.openKeyIntercept();
+                } else {
+                    mIKeyInterceptService.closeKeyIntercept();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

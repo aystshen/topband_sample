@@ -200,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements
     TextView mGpsNumberTv;
     @BindView(R.id.tv_light)
     TextView mLightTv;
+    @BindView(R.id.btn_androidx_key_intercept)
+    ToggleButton mAndroidxKeyInterceptBtn;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -361,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
             R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset, R.id.btn_androidx_power_on_time,
-            R.id.btn_androidx_power_off_time})
+            R.id.btn_androidx_power_off_time, R.id.btn_androidx_key_intercept})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_silent_install:
@@ -411,6 +413,9 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_androidx_watchdog_timeout:
                 showWatchdogDurationPickerDialog(true);
+                break;
+            case R.id.btn_androidx_key_intercept:
+                mAndroidXPresenter.toggleKeyIntercept(mAndroidxKeyInterceptBtn.isChecked());
                 break;
         }
     }
@@ -571,7 +576,6 @@ public class MainActivity extends AppCompatActivity implements
         if (mGpioPresenter.getMode() == GpioPresenter.Mode.KEY) {
             mGpioPresenter.checkKeyEvent(event);
         }
-
         mKeycodeBtn.setTextOff("KEY: " + event.getKeyCode());
         mKeycodeBtn.setTextOn("KEY: " + event.getKeyCode());
         mKeycodeBtn.setChecked(event.getAction() == KeyEvent.ACTION_DOWN);
@@ -757,6 +761,11 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             mOtgModeSpn.setSelection(0);
         }
+    }
+
+    @Override
+    public void updateAndroidXKeyIntercept(boolean enable) {
+        mAndroidxKeyInterceptBtn.setChecked(enable);
     }
 
     @Override
