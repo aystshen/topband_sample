@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.ayst.androidx.IKeyInterceptService;
+import com.ayst.androidx.ILog2fileService;
 import com.ayst.androidx.IModemService;
 import com.ayst.androidx.IOtgService;
 import com.ayst.androidx.IWatchdogService;
@@ -21,6 +22,7 @@ public class AndroidXPresenter {
     private static final String ACTION_WATCHDOG_SERVICE = "com.ayst.androidx.WATCHDOG_SERVICE";
     private static final String ACTION_OTG_SERVICE = "com.ayst.androidx.OTG_SERVICE";
     private static final String ACTION_KEY_INTERCEPT_SERVICE = "com.ayst.androidx.KEY_INTERCEPT_SERVICE";
+    private static final String ACTION_LOG2FILE_SERVICE = "com.ayst.androidx.LOG2FILE_SERVICE";
 
     private Context mContext;
     private IAndroidXView mAndroidXView;
@@ -28,6 +30,7 @@ public class AndroidXPresenter {
     private IWatchdogService mWatchdogService;
     private IOtgService mOtgService;
     private IKeyInterceptService mIKeyInterceptService;
+    private ILog2fileService mLog2fileService;
 
     public AndroidXPresenter(Context context, IAndroidXView view) {
         mContext = context;
@@ -54,6 +57,11 @@ public class AndroidXPresenter {
         intent3.setPackage(ANDROIDX_PACKAGE_NAME);
         intent3.setAction(ACTION_KEY_INTERCEPT_SERVICE);
         mContext.bindService(intent3, mKeyInterceptServiceConnection, Context.BIND_AUTO_CREATE);
+
+        Intent intent4 = new Intent();
+        intent4.setPackage(ANDROIDX_PACKAGE_NAME);
+        intent4.setAction(ACTION_LOG2FILE_SERVICE);
+        mContext.bindService(intent4, mLog2fileServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     public void stop() {
@@ -141,6 +149,26 @@ public class AndroidXPresenter {
         public void onServiceDisconnected(ComponentName name) {
             Log.d(TAG, "IKeyInterceptService, onServiceDisconnected...");
             mIKeyInterceptService = null;
+        }
+    };
+
+    private ServiceConnection mLog2fileServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "ILog2fileService, onServiceConnected...");
+
+            mLog2fileService = ILog2fileService.Stub.asInterface(service);
+            try {
+                mAndroidXView.updateAndroidXLog2file(mLog2fileService.isOpen());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "ILog2fileService, onServiceDisconnected...");
+            mLog2fileService = null;
         }
     };
 
@@ -251,6 +279,25 @@ public class AndroidXPresenter {
                     mIKeyInterceptService.openKeyIntercept();
                 } else {
                     mIKeyInterceptService.closeKeyIntercept();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 打开、关闭日志写入文件
+     *
+     * @param on
+     */
+    public void toggleLog2file(boolean on) {
+        if (null != mLog2fileService) {
+            try {
+                if (on) {
+                    mLog2fileService.openLog2file();
+                } else {
+                    mLog2fileService.closeLog2file();
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();

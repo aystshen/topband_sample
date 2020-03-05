@@ -202,6 +202,8 @@ public class MainActivity extends AppCompatActivity implements
     TextView mLightTv;
     @BindView(R.id.btn_androidx_key_intercept)
     ToggleButton mAndroidxKeyInterceptBtn;
+    @BindView(R.id.btn_androidx_log2file)
+    ToggleButton mAndroidxLog2fileBtn;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -363,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
             R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset, R.id.btn_androidx_power_on_time,
-            R.id.btn_androidx_power_off_time, R.id.btn_androidx_key_intercept})
+            R.id.btn_androidx_power_off_time, R.id.btn_androidx_key_intercept, R.id.btn_androidx_log2file})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_silent_install:
@@ -416,6 +418,9 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_androidx_key_intercept:
                 mAndroidXPresenter.toggleKeyIntercept(mAndroidxKeyInterceptBtn.isChecked());
+                break;
+            case R.id.btn_androidx_log2file:
+                mAndroidXPresenter.toggleLog2file(mAndroidxLog2fileBtn.isChecked());
                 break;
         }
     }
@@ -766,6 +771,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateAndroidXKeyIntercept(boolean enable) {
         mAndroidxKeyInterceptBtn.setChecked(enable);
+    }
+
+    @Override
+    public void updateAndroidXLog2file(boolean enable) {
+        mAndroidxLog2fileBtn.setChecked(enable);
     }
 
     @Override

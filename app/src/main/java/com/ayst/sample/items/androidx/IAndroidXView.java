@@ -6,4 +6,5 @@ public interface IAndroidXView {
     public void updateAndroidXWatchdogTimeout(int timeout);
     public void updateAndroidXOtgMode(String mode);
     public void updateAndroidXKeyIntercept(boolean enable);
+    public void updateAndroidXLog2file(boolean enable);
 }
