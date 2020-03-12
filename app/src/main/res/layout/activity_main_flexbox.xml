@@ -186,6 +186,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="Rom Upgrade" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_group"
+                android:padding="3dp"
+                app:alignContent="stretch"
+                app:alignItems="stretch"
+                app:flexWrap="wrap">
+
+                <ToggleButton
+                    android:id="@+id/btn_upgrade_install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Install"
+                    android:textOn="Install:OK" />
+
+                <ToggleButton
+                    android:id="@+id/btn_upgrade_verify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Verify"
+                    android:textOn="Verify:OK" />
+
+                <Button
+                    android:id="@+id/btn_upgrade_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete" />
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="Backlight" />
 
             <LinearLayout

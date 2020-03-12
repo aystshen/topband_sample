@@ -45,6 +45,7 @@ import com.ayst.sample.items.other.OtherPresenter;
 import com.ayst.sample.items.resumebyalarm.ResumeByAlarmPresenter;
 import com.ayst.sample.items.sensor.ISensorView;
 import com.ayst.sample.items.sensor.SensorPresenter;
+import com.ayst.sample.items.upgrade.RomUpgradePresenter;
 import com.ayst.sample.items.usb.IUsbView;
 import com.ayst.sample.items.usb.UsbPresenter;
 import com.ayst.sample.items.watchdog.IWatchdogView;
@@ -62,11 +63,6 @@ public class MainActivity extends AppCompatActivity implements
         IModemView, IUsbView, IA2dpSinkView, SeekBar.OnSeekBarChangeListener, IAndroidXView
         , IGpsView {
     private static final String TAG = "Sample";
-
-    private static final int TYPE_POWER_ON = 0;
-    private static final int TYPE_POWER_OFF = 1;
-    private static final int TYPE_REBOOT = 2;
-    private int mTimePickerType = TYPE_POWER_ON;
 
     @BindView(R.id.btn_tcp_adb)
     ToggleButton mTcpAdbBtn;
@@ -204,6 +200,17 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mAndroidxKeyInterceptBtn;
     @BindView(R.id.btn_androidx_log2file)
     ToggleButton mAndroidxLog2fileBtn;
+    @BindView(R.id.btn_upgrade_install)
+    ToggleButton mUpgradeInstallBtn;
+    @BindView(R.id.btn_upgrade_verify)
+    ToggleButton mUpgradeVerifyBtn;
+    @BindView(R.id.btn_upgrade_delete)
+    Button mUpgradeDeleteBtn;
+
+    private static final int TYPE_POWER_ON = 0;
+    private static final int TYPE_POWER_OFF = 1;
+    private static final int TYPE_REBOOT = 2;
+    private int mTimePickerType = TYPE_POWER_ON;
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
@@ -218,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements
     private AndroidXPresenter mAndroidXPresenter;
     private AudioPresenter mAudioPresenter;
     private GpsPresenter mGpsPresenter;
+    private RomUpgradePresenter mRomUpgradePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements
         mAndroidXPresenter = new AndroidXPresenter(this, this);
         mAudioPresenter = new AudioPresenter(this);
         mGpsPresenter = new GpsPresenter(this, this);
+        mRomUpgradePresenter = new RomUpgradePresenter(this);
 
         initView();
     }
@@ -256,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements
         mAndroidXPresenter.start();
         mOtherPresenter.start();
         mGpsPresenter.start();
+        mRomUpgradePresenter.start();
     }
 
     @Override
@@ -270,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements
         mAndroidXPresenter.stop();
         mOtherPresenter.stop();
         mGpsPresenter.stop();
+        mRomUpgradePresenter.stop();
     }
 
     @Override
@@ -365,7 +376,8 @@ public class MainActivity extends AppCompatActivity implements
             R.id.btn_gpio, R.id.btn_set_watchdog_time, R.id.btn_heartbeat, R.id.btn_modem_reset,
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
             R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset, R.id.btn_androidx_power_on_time,
-            R.id.btn_androidx_power_off_time, R.id.btn_androidx_key_intercept, R.id.btn_androidx_log2file})
+            R.id.btn_androidx_power_off_time, R.id.btn_androidx_key_intercept, R.id.btn_androidx_log2file,
+            R.id.btn_upgrade_install, R.id.btn_upgrade_verify, R.id.btn_upgrade_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_silent_install:
@@ -421,6 +433,23 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_androidx_log2file:
                 mAndroidXPresenter.toggleLog2file(mAndroidxLog2fileBtn.isChecked());
+                break;
+            case R.id.btn_upgrade_install:
+                if (mRomUpgradePresenter.installPackage("sdcard/update.zip")) {
+                    mUpgradeInstallBtn.setChecked(true);
+                } else {
+                    mUpgradeInstallBtn.setChecked(false);
+                }
+                break;
+            case R.id.btn_upgrade_verify:
+                if (mRomUpgradePresenter.verifyPackage("sdcard/update.zip")) {
+                    mUpgradeVerifyBtn.setChecked(true);
+                } else {
+                    mUpgradeVerifyBtn.setChecked(false);
+                }
+                break;
+            case R.id.btn_upgrade_delete:
+                mRomUpgradePresenter.deletePackage("sdcard/update.zip");
                 break;
         }
     }
