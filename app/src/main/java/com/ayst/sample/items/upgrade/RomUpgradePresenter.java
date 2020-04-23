@@ -49,6 +49,19 @@ public class RomUpgradePresenter {
     };
 
     /**
+     * 检查升级
+     */
+    public void checkUpdate() {
+        if (null != mRomUpgradeService) {
+            try {
+                mRomUpgradeService.checkUpdate();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * 安装升级
      *
      * @param packagePath ota升级包

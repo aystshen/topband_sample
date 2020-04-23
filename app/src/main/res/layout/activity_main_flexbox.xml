@@ -197,6 +197,12 @@
                 app:alignItems="stretch"
                 app:flexWrap="wrap">
 
+                <Button
+                    android:id="@+id/btn_upgrade_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Check" />
+
                 <ToggleButton
                     android:id="@+id/btn_upgrade_install"
                     android:layout_width="wrap_content"

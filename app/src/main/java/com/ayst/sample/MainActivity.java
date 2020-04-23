@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
             R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset, R.id.btn_androidx_power_on_time,
             R.id.btn_androidx_power_off_time, R.id.btn_androidx_key_intercept, R.id.btn_androidx_log2file,
-            R.id.btn_upgrade_install, R.id.btn_upgrade_verify, R.id.btn_upgrade_delete})
+            R.id.btn_upgrade_install, R.id.btn_upgrade_verify, R.id.btn_upgrade_delete, R.id.btn_upgrade_check})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_silent_install:
@@ -433,6 +433,9 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_androidx_log2file:
                 mAndroidXPresenter.toggleLog2file(mAndroidxLog2fileBtn.isChecked());
+                break;
+            case R.id.btn_upgrade_check:
+                mRomUpgradePresenter.checkUpdate();
                 break;
             case R.id.btn_upgrade_install:
                 if (mRomUpgradePresenter.installPackage("sdcard/update.zip")) {
