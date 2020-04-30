@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class OtherPresenter {
 
     /**
      * 静默安装
+     *
      * @param path
      * @return
      */
@@ -135,6 +137,7 @@ public class OtherPresenter {
 
     /**
      * 全屏显示，隐藏状态栏与导航栏
+     *
      * @param activity
      */
     public void fullScreen(Activity activity) {
@@ -153,6 +156,7 @@ public class OtherPresenter {
 
     /**
      * 退出全屏，显示状态栏与导航栏
+     *
      * @param activity
      */
     public void exitFullScreen(Activity activity) {
@@ -175,6 +179,26 @@ public class OtherPresenter {
         Intent intent = new Intent();
         intent.setAction("android.intent.action.SYSTEM_BAR_SHOW");
         mContext.sendBroadcast(intent);
+    }
+
+    /**
+     * 获取自动同步时间
+     *
+     * @return 0：关闭；1：打开；
+     */
+    public int getAutoTime() {
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.AUTO_TIME, 0);
+    }
+
+    /**
+     * 设置自动同步时间
+     *
+     * @param value 0：关闭；1：打开；
+     */
+    public void setAutoTime(int value) {
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.AUTO_TIME, value);
     }
 
     @SuppressLint("PrivateApi")

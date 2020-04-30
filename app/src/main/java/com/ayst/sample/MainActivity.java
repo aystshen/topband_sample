@@ -154,6 +154,8 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mFullscreenBtn;
     @BindView(R.id.btn_systembar)
     ToggleButton mSystembarBtn;
+    @BindView(R.id.btn_auto_time)
+    ToggleButton mAutoTimeBtn;
     @BindView(R.id.btn_androidx_4g)
     ToggleButton mAndroidx4gBtn;
     @BindView(R.id.btn_androidx_watchdog)
@@ -299,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements
         mScreenBtn.setOnCheckedChangeListener(this);
         mFullscreenBtn.setOnCheckedChangeListener(this);
         mSystembarBtn.setOnCheckedChangeListener(this);
+        mAutoTimeBtn.setOnCheckedChangeListener(this);
         mAudioPlayBtn.setOnCheckedChangeListener(this);
         mGpsStatusBtn.setOnCheckedChangeListener(this);
 
@@ -313,6 +316,8 @@ public class MainActivity extends AppCompatActivity implements
         mAudioNotificationSeekbar.setOnSeekBarChangeListener(this);
         mAudioCustom1Seekbar.setOnSeekBarChangeListener(this);
         mAudioCustom2Seekbar.setOnSeekBarChangeListener(this);
+
+        mAutoTimeBtn.setChecked(mOtherPresenter.getAutoTime() > 0);
 
         // init gpio
         if (mGpioPresenter.getNumber() > 0) {
@@ -549,6 +554,13 @@ public class MainActivity extends AppCompatActivity implements
                     mOtherPresenter.hideSystemBar();
                 } else {
                     mOtherPresenter.showSystemBar();
+                }
+                break;
+            case R.id.btn_auto_time:
+                if (b) {
+                    mOtherPresenter.setAutoTime(1);
+                } else {
+                    mOtherPresenter.setAutoTime(0);
                 }
                 break;
             case R.id.btn_audio_play:

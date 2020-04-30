@@ -96,6 +96,13 @@
                     android:textOff="Hide System Bar"
                     android:textOn="Show System Bar" />
 
+                <ToggleButton
+                    android:id="@+id/btn_auto_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="Auto Time"
+                    android:textOn="Auto Time" />
+
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView
