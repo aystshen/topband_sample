@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -199,6 +200,24 @@ public class OtherPresenter {
     public void setAutoTime(int value) {
         Settings.Global.putInt(mContext.getContentResolver(),
                 Settings.Global.AUTO_TIME, value);
+    }
+
+    /**
+     * 获取当前时间戳
+     *
+     * @return 时间戳
+     */
+    public long getTime() {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * 设置时间戳
+     *
+     * @param millis 时间戳
+     */
+    public void setTime(long millis) {
+        SystemClock.setCurrentTimeMillis(millis);
     }
 
     @SuppressLint("PrivateApi")
