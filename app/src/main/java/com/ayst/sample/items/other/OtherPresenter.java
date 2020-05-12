@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -50,7 +51,11 @@ public class OtherPresenter {
         ShellUtils.CommandResult result1 = ShellUtils.execCommand("stop adbd", true);
         ShellUtils.CommandResult result2 = ShellUtils.execCommand("start adbd", true);
 
-        mOtherView.updateTcpAdbResult(result1.errorMsg.isEmpty() && result2.errorMsg.isEmpty());
+        mOtherView.updateTcpAdbResult(
+                result1.result >=0
+                && result2.result >=0
+                && TextUtils.isEmpty(result1.errorMsg)
+                && TextUtils.isEmpty(result2.errorMsg));
     }
 
     /**
@@ -61,7 +66,8 @@ public class OtherPresenter {
 
         Log.i(TAG, "execute, success message: " + result.successMsg + ", error message: " + result.errorMsg);
 
-        mOtherView.updateRootResult(result.errorMsg.isEmpty());
+        mOtherView.updateRootResult(result.result >=0
+                && TextUtils.isEmpty(result.errorMsg));
     }
 
     /**
