@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.ayst.utils.AppUtils;
+import com.ayst.utils.InstallUtil;
 
 import java.lang.reflect.Method;
 
@@ -77,7 +78,7 @@ public class OtherPresenter {
      * @return
      */
     public boolean silentInstall(String path) {
-        return SilentInstall.install(mContext, path);
+        return InstallUtil.installSilent(path);
     }
 
     /**

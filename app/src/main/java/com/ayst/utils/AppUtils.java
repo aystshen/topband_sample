@@ -358,7 +358,7 @@ public class AppUtils {
                             + " R:" + sdcardDir.canRead() + " W:" + sdcardDir.canWrite());
 
                     if (sdcardDir.canWrite()) {
-                        String dir = sdcardDir.getAbsolutePath() + "/com.topband.autoupgrade";
+                        String dir = sdcardDir.getAbsolutePath();
                         File file = new File(dir);
                         if (!file.exists()) {
                             Log.i(TAG, "getRootDir, dir not exist and make dir");

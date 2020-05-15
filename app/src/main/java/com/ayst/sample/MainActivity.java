@@ -50,6 +50,7 @@ import com.ayst.sample.items.usb.IUsbView;
 import com.ayst.sample.items.usb.UsbPresenter;
 import com.ayst.sample.items.watchdog.IWatchdogView;
 import com.ayst.sample.items.watchdog.WatchdogPresenter;
+import com.ayst.utils.AppUtils;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import butterknife.BindView;
@@ -386,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_silent_install:
-                mOtherPresenter.silentInstall("");
+                mOtherPresenter.silentInstall(AppUtils.getRootDir(this) + "/demo.apk");
                 break;
             case R.id.btn_reboot:
                 mOtherPresenter.reboot();

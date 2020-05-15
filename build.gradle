@@ -35,7 +35,7 @@ ext {
     compileSdkVersion = 28
     buildToolsVersion = "28.0.3"
     minSdkVersion = 21
-    targetSdkVersion = 21
+    targetSdkVersion = 28
 
     keyStoreAlias = properties.getProperty("keystore.alias")
     keyStorePath = properties.getProperty("keystore.path")
