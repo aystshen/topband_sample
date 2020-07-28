@@ -60,6 +60,9 @@
     <init>(java.lang.Throwable);
 }
 
+# UVCCamera
+-keep class com.serenegiant.** { *; }
+
 # Self
 -keep class android.os.**{*;}
 -keep class com.ayst.androidx.IModemService{*;}
