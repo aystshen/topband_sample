@@ -34,6 +34,7 @@ import com.ayst.sample.items.audio.AudioPresenter;
 import com.ayst.sample.items.backlight.BacklightPresenter;
 import com.ayst.sample.items.camera.CameraPresenter;
 import com.ayst.sample.items.camera.ICameraView;
+import com.ayst.sample.items.camera.UVCPresenter;
 import com.ayst.sample.items.gpio.GpioPresenter;
 import com.ayst.sample.items.gpio.IGpioView;
 import com.ayst.sample.items.gps.GpsPresenter;
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mGpioBtn;
     @BindView(R.id.btn_camera)
     ToggleButton mCameraBtn;
+    @BindView(R.id.btn_uvc)
+    ToggleButton mUVCBtn;
     @BindView(R.id.tv_camera_info)
     TextView mCameraInfoTv;
     @BindView(R.id.layout_camera)
@@ -217,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private OtherPresenter mOtherPresenter;
     private CameraPresenter mCameraPresenter;
+    private UVCPresenter mUVCPresenter;
     private SensorPresenter mSensorPresenter;
     private GpioPresenter mGpioPresenter;
     private WatchdogPresenter mWatchdogPresenter;
@@ -240,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements
 
         mOtherPresenter = new OtherPresenter(this, this);
         mCameraPresenter = new CameraPresenter(this, this);
+        mUVCPresenter = new UVCPresenter(this, this);
         mSensorPresenter = new SensorPresenter(this, this);
         mGpioPresenter = new GpioPresenter(this, this);
         mWatchdogPresenter = new WatchdogPresenter(this, this);
@@ -284,6 +289,8 @@ public class MainActivity extends AppCompatActivity implements
         mOtherPresenter.stop();
         mGpsPresenter.stop();
         mRomUpgradePresenter.stop();
+        mCameraPresenter.stop();
+        mUVCPresenter.stop();
     }
 
     @Override
@@ -295,6 +302,7 @@ public class MainActivity extends AppCompatActivity implements
         mTcpAdbBtn.setOnCheckedChangeListener(this);
         mRootTestBtn.setOnCheckedChangeListener(this);
         mCameraBtn.setOnCheckedChangeListener(this);
+        mUVCBtn.setOnCheckedChangeListener(this);
         mWatchdogBtn.setOnCheckedChangeListener(this);
         mTimingPowerOnBtn.setOnCheckedChangeListener(this);
         mTimingPowerOffBtn.setOnCheckedChangeListener(this);
@@ -481,6 +489,13 @@ public class MainActivity extends AppCompatActivity implements
                     mCameraPresenter.start();
                 } else {
                     mCameraPresenter.stop();
+                }
+                break;
+            case R.id.btn_uvc:
+                if (b) {
+                    mUVCPresenter.start();
+                } else {
+                    mUVCPresenter.stop();
                 }
                 break;
             case R.id.rdo_gpio_input:

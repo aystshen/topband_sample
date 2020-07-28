@@ -9,3 +9,6 @@
 /captures
 .externalNativeBuild
 /app/release
+.DS_Store
+obj/
+build/

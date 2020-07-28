@@ -3,6 +3,7 @@
 buildscript {
     
     repositories {
+        maven { url 'https://mirrors.huaweicloud.com/repository/maven/' }
         google()
         jcenter()
     }
@@ -13,8 +14,12 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'https://mirrors.huaweicloud.com/repository/maven/' }
         google()
         jcenter()
+        maven { url "https://www.jitpack.io" }
+        maven { url 'https://raw.github.com/saki4510t/libcommon/master/repository/' }
+        maven { url 'https://download.01.org/crosswalk/releases/crosswalk/android/maven2' }
     }
 
     gradle.projectsEvaluated {
@@ -36,6 +41,11 @@ ext {
     buildToolsVersion = "28.0.3"
     minSdkVersion = 21
     targetSdkVersion = 28
+
+    commonLibVersion = '2.12.4'
+
+    javaSourceCompatibility = JavaVersion.VERSION_1_8
+    javaTargetCompatibility = JavaVersion.VERSION_1_8
 
     keyStoreAlias = properties.getProperty("keystore.alias")
     keyStorePath = properties.getProperty("keystore.path")

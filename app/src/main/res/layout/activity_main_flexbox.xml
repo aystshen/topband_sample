@@ -297,8 +297,15 @@
                     android:id="@+id/btn_camera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textOff="Open"
-                    android:textOn="Close" />
+                    android:textOff="API"
+                    android:textOn="API" />
+
+                <ToggleButton
+                    android:id="@+id/btn_uvc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textOff="UVC"
+                    android:textOn="UVC" />
 
                 <TextView
                     android:id="@+id/tv_camera_info"
