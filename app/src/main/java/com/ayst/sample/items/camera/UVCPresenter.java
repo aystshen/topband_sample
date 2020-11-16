@@ -16,6 +16,8 @@ import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.UVCCamera;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,6 +146,8 @@ public class UVCPresenter {
 
                 List<Size> sizes = camera.getSupportedSizeList();
                 if (sizes != null && !sizes.isEmpty()) {
+                    Collections.sort(sizes, new SizeComparator());
+                    Log.i(TAG, "open, supported size: " + sizes.toString());
                     try {
                         camera.setPreviewSize(sizes.get(sizes.size() - 1).width,
                                 sizes.get(sizes.size() - 1).height,
@@ -173,6 +177,9 @@ public class UVCPresenter {
                         // Set preview surface
                         camera.setPreviewDisplay(surfaceHolder);
                         camera.startPreview();
+                        Size previewSize = camera.getPreviewSize();
+                        Log.i(TAG, "surfaceCreated, preview size: "
+                                + previewSize.width + "x" + previewSize.height);
                     }
 
                     @Override
@@ -226,5 +233,13 @@ public class UVCPresenter {
     private class CameraItem {
         private UVCCamera camera;
         private SurfaceView surface;
+    }
+
+    private class SizeComparator implements Comparator<Size> {
+
+        @Override
+        public int compare(Size size1, Size size2) {
+            return (size1.width-size2.width) == 0 ? (size1.height-size2.height) : (size1.width-size2.width);
+        }
     }
 }
