@@ -13,6 +13,8 @@ import com.ayst.utils.AppUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -26,6 +28,7 @@ public class CameraPresenter {
     private ICameraView mCameraView;
     private Handler mHandler;
 
+    private boolean isHD = true;
     private List<CameraItem> mCameras = new ArrayList<>();
 
     public CameraPresenter(Context context, ICameraView view) {
@@ -34,7 +37,8 @@ public class CameraPresenter {
         mHandler = new Handler(Looper.getMainLooper());
     }
 
-    public void start() {
+    public void start(boolean isHD) {
+        this.isHD = isHD;
         mHandler.removeCallbacks(mCameraRunnable);
         mHandler.postDelayed(mCameraRunnable, 100);
     }
@@ -62,6 +66,16 @@ public class CameraPresenter {
         for (CameraItem cameraItem : mCameras) {
             if (cameraItem.id == id) {
                 try {
+                    Camera.Parameters parameters = cameraItem.camera.getParameters();
+                    List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
+                    if (sizes != null && !sizes.isEmpty()) {
+                        Collections.sort(sizes, new SizeComparator());
+                        Camera.Size previewSize = sizes.get(isHD ? sizes.size()-1 : 0);
+                        parameters.setPreviewSize(previewSize.width, previewSize.height);
+                        cameraItem.camera.setParameters(parameters);
+                        Log.i(TAG, "preview, preview size: " + previewSize.width
+                                + "x" + previewSize.height);
+                    }
                     cameraItem.camera.setPreviewDisplay(cameraItem.surface.getHolder());
                     cameraItem.camera.startPreview();
                 } catch (IOException e) {
@@ -134,6 +148,14 @@ public class CameraPresenter {
                 camera.release();
                 camera = null;
             }
+        }
+    }
+
+    private class SizeComparator implements Comparator<Camera.Size> {
+
+        @Override
+        public int compare(Camera.Size size1, Camera.Size size2) {
+            return (size1.width-size2.width) == 0 ? (size1.height-size2.height) : (size1.width-size2.width);
         }
     }
 }

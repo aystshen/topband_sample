@@ -35,6 +35,7 @@ import io.reactivex.schedulers.Schedulers;
 public class UVCPresenter {
     private static final String TAG = "UVCPresenter";
 
+    private boolean isHD = true;
     private Context mContext;
     private ICameraView mCameraView;
     private USBMonitor mUSBMonitor;
@@ -48,7 +49,9 @@ public class UVCPresenter {
     }
 
     @SuppressLint("CheckResult")
-    public void start() {
+    public void start(boolean isHD) {
+        this.isHD = isHD;
+
         // 构建UVCCamera相关类
         mUSBMonitor = new USBMonitor(mContext, mOnDeviceConnectListener);
         final List<DeviceFilter> filter = DeviceFilter.getDeviceFilters(mContext, R.xml.device_filter);
@@ -148,15 +151,16 @@ public class UVCPresenter {
                 if (sizes != null && !sizes.isEmpty()) {
                     Collections.sort(sizes, new SizeComparator());
                     Log.i(TAG, "open, supported size: " + sizes.toString());
+                    Size previewSize = sizes.get(isHD ? sizes.size()-1 : 0);
                     try {
-                        camera.setPreviewSize(sizes.get(sizes.size() - 1).width,
-                                sizes.get(sizes.size() - 1).height,
+                        camera.setPreviewSize(previewSize.width,
+                                previewSize.height,
                                 UVCCamera.FRAME_FORMAT_MJPEG);
                     } catch (final IllegalArgumentException e) {
                         // fallback to YUV mode
                         try {
-                            camera.setPreviewSize(sizes.get(sizes.size() - 1).width,
-                                    sizes.get(sizes.size() - 1).height,
+                            camera.setPreviewSize(previewSize.width,
+                                    previewSize.height,
                                     UVCCamera.DEFAULT_PREVIEW_MODE);
                         } catch (final IllegalArgumentException e1) {
                             Log.e(TAG, "open, setPreviewSize failed!");

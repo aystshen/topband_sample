@@ -307,10 +307,18 @@
                     android:textOff="UVC"
                     android:textOn="UVC" />
 
+                <CheckBox
+                    android:id="@+id/chk_camera_hd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="High Definition"/>
+
                 <TextView
                     android:id="@+id/tv_camera_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:gravity="center_vertical"
                     android:textColor="@color/black" />
 

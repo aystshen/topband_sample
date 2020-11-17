@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -84,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mCameraBtn;
     @BindView(R.id.btn_uvc)
     ToggleButton mUVCBtn;
+    @BindView(R.id.chk_camera_hd)
+    CheckBox mCameraHDChk;
     @BindView(R.id.tv_camera_info)
     TextView mCameraInfoTv;
     @BindView(R.id.layout_camera)
@@ -486,14 +489,14 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_camera:
                 if (b) {
-                    mCameraPresenter.start();
+                    mCameraPresenter.start(mCameraHDChk.isChecked());
                 } else {
                     mCameraPresenter.stop();
                 }
                 break;
             case R.id.btn_uvc:
                 if (b) {
-                    mUVCPresenter.start();
+                    mUVCPresenter.start(mCameraHDChk.isChecked());
                 } else {
                     mUVCPresenter.stop();
                 }
