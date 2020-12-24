@@ -7,10 +7,7 @@ import android.hardware.usb.UsbDevice;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 
-import com.ayst.sample.R;
-import com.serenegiant.usb.DeviceFilter;
 import com.serenegiant.usb.Size;
 import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.UVCCamera;
@@ -21,12 +18,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/12/17.
@@ -131,7 +123,7 @@ public class UVCPresenter {
                 if (sizes != null && !sizes.isEmpty()) {
                     Collections.sort(sizes, new SizeComparator());
                     Log.i(TAG, "open, supported size: " + sizes.toString());
-                    Size previewSize = sizes.get(isHD ? sizes.size()-1 : 0);
+                    Size previewSize = sizes.get(isHD ? sizes.size() - 1 : 0);
                     try {
                         camera.setPreviewSize(previewSize.width,
                                 previewSize.height,
@@ -223,7 +215,7 @@ public class UVCPresenter {
 
         @Override
         public int compare(Size size1, Size size2) {
-            return (size1.width-size2.width) == 0 ? (size1.height-size2.height) : (size1.width-size2.width);
+            return (size1.width - size2.width) == 0 ? (size1.height - size2.height) : (size1.width - size2.width);
         }
     }
 }
