@@ -91,7 +91,7 @@ public class CameraPresenter {
             cameraItem.release();
         }
         mCameras.clear();
-        mCameraView.removeCameraView();
+        mCameraView.removeCameraViewAll();
     }
 
     private Runnable mCameraRunnable = new Runnable() {

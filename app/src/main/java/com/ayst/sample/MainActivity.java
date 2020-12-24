@@ -711,8 +711,15 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void removeCameraView() {
+    public void removeCameraViewAll() {
         mCameraLayout.removeAllViews();
+    }
+
+    @Override
+    public void removeCameraView(SurfaceView surface) {
+        if (surface != null) {
+            mCameraLayout.removeView(surface);
+        }
     }
 
     @Override

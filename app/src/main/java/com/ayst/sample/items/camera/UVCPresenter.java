@@ -39,7 +39,6 @@ public class UVCPresenter {
     private Context mContext;
     private ICameraView mCameraView;
     private USBMonitor mUSBMonitor;
-    private List<UsbDevice> mUsbDeviceList;
     private final Object mSync = new Object();
     private Map<String, CameraItem> mCameras = new HashMap<>();
 
@@ -54,35 +53,7 @@ public class UVCPresenter {
 
         // 构建UVCCamera相关类
         mUSBMonitor = new USBMonitor(mContext, mOnDeviceConnectListener);
-        final List<DeviceFilter> filter = DeviceFilter.getDeviceFilters(mContext, R.xml.device_filter);
-        mUsbDeviceList = mUSBMonitor.getDeviceList(filter.get(0));
-
-        if (!mUsbDeviceList.isEmpty()) {
-            synchronized (mSync) {
-                if (mUSBMonitor != null) {
-                    mUSBMonitor.register();
-
-                    for (int i = 0; i < mUsbDeviceList.size(); i++) {
-                        // 摄像头请求权限
-                        UsbDevice device = mUsbDeviceList.get(i);
-                        Observable.timer(i * 1000, TimeUnit.MILLISECONDS)
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new Consumer<Long>() {
-                                    @Override
-                                    public void accept(Long aLong) throws Exception {
-                                        Log.i(TAG, "onStart, requestPermission "
-                                                + String.format("%x:%x", device.getVendorId(),
-                                                device.getProductId()));
-                                        mUSBMonitor.requestPermission(device);
-                                    }
-                                });
-                    }
-                }
-            }
-        } else {
-            Log.e(TAG, "start, mUsbDeviceList is null.");
-            Toast.makeText(mContext, "No UVC camera!", Toast.LENGTH_SHORT).show();
-        }
+        mUSBMonitor.register();
     }
 
     private final USBMonitor.OnDeviceConnectListener mOnDeviceConnectListener =
@@ -90,16 +61,18 @@ public class UVCPresenter {
 
                 @Override
                 public void onAttach(UsbDevice device) {
+                    Log.i(TAG, "USBMonitor, onAttach " + String.format("%x", device.getProductId()));
+                    mUSBMonitor.requestPermission(device);
                 }
 
                 @Override
                 public void onDettach(UsbDevice device) {
+                    Log.i(TAG, "USBMonitor, onDettach " + String.format("%x", device.getProductId()));
                 }
 
                 @Override
                 public void onConnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock, boolean createNew) {
                     Log.i(TAG, "USBMonitor, onConnect " + String.format("%x", device.getProductId()));
-                    release(getCameraTag(device));
                     open(getCameraTag(device), ctrlBlock);
                 }
 
@@ -119,24 +92,31 @@ public class UVCPresenter {
         synchronized (mSync) {
             Log.i(TAG, "release, " + tag);
 
+            /* USB Camera断开时，执行下面close或destroy操作会阻塞，
+             * 影响重连，因此注释掉
+             */
+//            CameraItem item = mCameras.get(tag);
+//            if (item != null) {
+//                if (item.camera != null) {
+//                    try {
+//                        item.camera.stopPreview();
+//                        item.camera.setStatusCallback(null);
+//                        item.camera.setButtonCallback(null);
+//                        item.camera.close();
+//                        if (null != item.camera) {
+//                            item.camera.destroy();
+//                        }
+//                    } catch (final Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    item.camera = null;
+//                }
+//            }
             CameraItem item = mCameras.get(tag);
             if (item != null) {
-                if (item.camera != null) {
-                    try {
-                        item.camera.stopPreview();
-                        item.camera.setStatusCallback(null);
-                        item.camera.setButtonCallback(null);
-                        item.camera.close();
-                        if (null != item.camera) {
-                            item.camera.destroy();
-                        }
-                    } catch (final Exception e) {
-                        e.printStackTrace();
-                    }
-                    item.camera = null;
-                }
+                mCameraView.removeCameraView(item.surface);
+                mCameras.remove(tag);
             }
-            mCameras.remove(tag);
         }
     }
 
@@ -227,7 +207,7 @@ public class UVCPresenter {
         }
 
         mCameras.clear();
-        mCameraView.removeCameraView();
+        mCameraView.removeCameraViewAll();
     }
 
     private String getCameraTag(UsbDevice device) {
