@@ -215,6 +215,8 @@ public class MainActivity extends AppCompatActivity implements
     ToggleButton mUpgradeVerifyBtn;
     @BindView(R.id.btn_upgrade_delete)
     Button mUpgradeDeleteBtn;
+    @BindView(R.id.btn_tts)
+    Button mTtsBtn;
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -394,7 +396,8 @@ public class MainActivity extends AppCompatActivity implements
             R.id.btn_switch_watchdog, R.id.btn_androidx_4g, R.id.btn_androidx_watchdog,
             R.id.btn_androidx_watchdog_timeout, R.id.btn_factory_reset, R.id.btn_androidx_power_on_time,
             R.id.btn_androidx_power_off_time, R.id.btn_androidx_key_intercept, R.id.btn_androidx_log2file,
-            R.id.btn_upgrade_install, R.id.btn_upgrade_verify, R.id.btn_upgrade_delete, R.id.btn_upgrade_check})
+            R.id.btn_upgrade_install, R.id.btn_upgrade_verify, R.id.btn_upgrade_delete, R.id.btn_upgrade_check,
+            R.id.btn_tts})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_silent_install:
@@ -470,6 +473,9 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.btn_upgrade_delete:
                 mRomUpgradePresenter.deletePackage("sdcard/update.zip");
+                break;
+            case R.id.btn_tts:
+                mOtherPresenter.tts("您好，我在测试TTS语音功能");
                 break;
         }
     }

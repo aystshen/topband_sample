@@ -103,6 +103,12 @@
                     android:textOff="Auto Time"
                     android:textOn="Auto Time" />
 
+                <Button
+                    android:id="@+id/btn_tts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TTS" />
+
             </com.google.android.flexbox.FlexboxLayout>
 
             <TextView

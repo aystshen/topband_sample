@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.ayst.utils.AppUtils;
 import com.ayst.utils.InstallUtil;
 
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 import cn.trinea.android.common.util.ShellUtils;
 
@@ -31,11 +33,13 @@ public class OtherPresenter {
     private IOtherView mOtherView;
     private PowerManager mPowerManager;
     private PowerManager.WakeLock mWakeLock;
+    private TextToSpeech mSpeech;
 
     public OtherPresenter(Context context, IOtherView view) {
         mContext = context;
         mOtherView = view;
         activeAdmin(context);
+        mSpeech = new TextToSpeech(mContext, new TTSListener());
     }
 
     public void start() {
@@ -227,6 +231,13 @@ public class OtherPresenter {
         SystemClock.setCurrentTimeMillis(millis);
     }
 
+    public void tts(String text) {
+        Log.i(TAG, "tts, text: " + text);
+        mSpeech.setSpeechRate(1.0f);
+        mSpeech.setPitch(1.0f);
+        mSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
     @SuppressLint("PrivateApi")
     private static void activeAdmin(Context context) {
         ComponentName adminReceiver = new ComponentName(context, AdminReceiver.class);
@@ -262,4 +273,21 @@ public class OtherPresenter {
             Log.i(TAG, "Package change receive action: " + action);
         }
     };
+
+    private class TTSListener implements TextToSpeech.OnInitListener {
+        @Override
+        public void onInit(int status) {
+            // TODO Auto-generated method stub
+            if (status == TextToSpeech.SUCCESS) {
+                int supported = mSpeech.setLanguage(Locale.CHINESE);
+                if (supported != TextToSpeech.LANG_AVAILABLE
+                        && supported != TextToSpeech.LANG_COUNTRY_AVAILABLE) {
+                    Log.e(TAG, "TTS onInit, not support language");
+                }
+                Log.i(TAG, "TTS onInit, success");
+            } else {
+                Log.e(TAG, "TTS onInit, failed");
+            }
+        }
+    }
 }
