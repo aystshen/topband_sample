@@ -32,6 +32,7 @@ public class SensorPresenter {
             // Accelerometer Sensor
             Sensor accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (accSensor != null) {
+                Log.i(TAG, "accSensor>>>>");
                 mAccSensorEventListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
@@ -47,11 +48,14 @@ public class SensorPresenter {
                     }
                 };
                 mSensorManager.registerListener(mAccSensorEventListener, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Log.e(TAG, "accSensor is null");
             }
 
             // Gyroscope Sensor
             Sensor gyroSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
             if (gyroSensor != null) {
+                Log.i(TAG, "gyroSensor>>>>");
                 mGyroSensorEventListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
@@ -67,11 +71,14 @@ public class SensorPresenter {
                     }
                 };
                 mSensorManager.registerListener(mGyroSensorEventListener, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Log.e(TAG, "gyroSensor is null");
             }
 
             // Adc Sensor
             Sensor adcSensor = mSensorManager.getDefaultSensor(26); // 26: Sensor.TYPE_ADC
             if (adcSensor != null) {
+                Log.i(TAG, "adcSensor>>>>");
                 mAdcSensorEventListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
@@ -85,6 +92,8 @@ public class SensorPresenter {
                     }
                 };
                 mSensorManager.registerListener(mAdcSensorEventListener, adcSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Log.e(TAG, "adcSensor is null");
             }
 
             // Human Sensor
@@ -93,7 +102,7 @@ public class SensorPresenter {
             // 37: Sensor.TYPE_HUMAN for Android 11.0
             Sensor humanSensor = mSensorManager.getDefaultSensor(37);
             if (humanSensor != null) {
-                Log.e(TAG, "humanSensor>>>>");
+                Log.i(TAG, "humanSensor>>>>");
                 mHumanSensorEventListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
@@ -114,7 +123,7 @@ public class SensorPresenter {
             // Light Sensor
             Sensor lightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
             if (lightSensor != null) {
-                Log.e(TAG, "lightSensor>>>>");
+                Log.i(TAG, "lightSensor>>>>");
                 mLightSensorEventListener = new SensorEventListener() {
                     @Override
                     public void onSensorChanged(SensorEvent event) {
