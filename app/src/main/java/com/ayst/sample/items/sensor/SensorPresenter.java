@@ -88,7 +88,10 @@ public class SensorPresenter {
             }
 
             // Human Sensor
-            Sensor humanSensor = mSensorManager.getDefaultSensor(36); // 27: Sensor.TYPE_HUMAN
+            // 27: Sensor.TYPE_HUMAN for Android 5.1
+            // 36: Sensor.TYPE_HUMAN for Android 8.1
+            // 37: Sensor.TYPE_HUMAN for Android 11.0
+            Sensor humanSensor = mSensorManager.getDefaultSensor(37);
             if (humanSensor != null) {
                 Log.e(TAG, "humanSensor>>>>");
                 mHumanSensorEventListener = new SensorEventListener() {
