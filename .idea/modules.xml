@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="sample/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libuvccamera/libuvccamera.iml" filepath="$PROJECT_DIR$/.idea/modules/libuvccamera/libuvccamera.iml" group="sample/libuvccamera" />
-      <module fileurl="file://$PROJECT_DIR$/sample.iml" filepath="$PROJECT_DIR$/sample.iml" group="sample" />
+      <module fileurl="file://$PROJECT_DIR$/sample.iml" filepath="$PROJECT_DIR$/sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/sample.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/sample.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/libuvccamera/sample.libuvccamera.iml" filepath="$PROJECT_DIR$/.idea/modules/libuvccamera/sample.libuvccamera.iml" />
     </modules>
   </component>
 </project>
