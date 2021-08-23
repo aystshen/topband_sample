@@ -205,6 +205,8 @@ public class MainActivity extends AppCompatActivity implements
     TextView mGpsNumberTv;
     @BindView(R.id.tv_light)
     TextView mLightTv;
+    @BindView(R.id.tv_proximity)
+    TextView mProximityTv;
     @BindView(R.id.btn_androidx_key_intercept)
     ToggleButton mAndroidxKeyInterceptBtn;
     @BindView(R.id.btn_androidx_log2file)
@@ -766,6 +768,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void updateLightSensorData(float value) {
         mLightTv.setText(value + "");
+    }
+
+    @Override
+    public void updateProximitySensorData(float value) {
+        mProximityTv.setText(value + "");
     }
 
     @Override

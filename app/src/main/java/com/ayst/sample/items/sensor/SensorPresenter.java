@@ -7,8 +7,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import java.util.List;
-
 public class SensorPresenter {
     private static final String TAG = "SensorPresenter";
 
@@ -20,6 +18,7 @@ public class SensorPresenter {
     private SensorEventListener mAdcSensorEventListener;
     private SensorEventListener mHumanSensorEventListener;
     private SensorEventListener mLightSensorEventListener;
+    private SensorEventListener mProximitySensorEventListener;
 
     public SensorPresenter(Context context, ISensorView view) {
         mContext = context;
@@ -76,7 +75,7 @@ public class SensorPresenter {
             }
 
             // Adc Sensor
-            Sensor adcSensor = mSensorManager.getDefaultSensor(26); // 26: Sensor.TYPE_ADC
+            Sensor adcSensor = mSensorManager.getDefaultSensor(38); // 26: Sensor.TYPE_ADC
             if (adcSensor != null) {
                 Log.i(TAG, "adcSensor>>>>");
                 mAdcSensorEventListener = new SensorEventListener() {
@@ -139,6 +138,27 @@ public class SensorPresenter {
                 mSensorManager.registerListener(mLightSensorEventListener, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
             } else {
                 Log.e(TAG, "lightSensor is null");
+            }
+
+            // Proximity Sensor
+            Sensor proximitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+            if (proximitySensor != null) {
+                Log.i(TAG, "proximitySensor>>>>");
+                mProximitySensorEventListener = new SensorEventListener() {
+                    @Override
+                    public void onSensorChanged(SensorEvent event) {
+                        float proximity = event.values[0];
+                        mSensorView.updateProximitySensorData(proximity);
+                    }
+
+                    @Override
+                    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+                    }
+                };
+                mSensorManager.registerListener(mProximitySensorEventListener, proximitySensor, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                Log.e(TAG, "proximitySensor is null");
             }
         }
     }

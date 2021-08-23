@@ -6,4 +6,5 @@ public interface ISensorView {
     void updateAdcSensorData(float value);
     void updateHumanSensorData(float value);
     void updateLightSensorData(float value);
+    void updateProximitySensorData(float value);
 }
