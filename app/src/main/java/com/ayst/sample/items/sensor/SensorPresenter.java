@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.util.Log;
 
 public class SensorPresenter {
@@ -99,7 +100,15 @@ public class SensorPresenter {
             // 27: Sensor.TYPE_HUMAN for Android 5.1
             // 36: Sensor.TYPE_HUMAN for Android 8.1
             // 37: Sensor.TYPE_HUMAN for Android 11.0
-            Sensor humanSensor = mSensorManager.getDefaultSensor(37);
+            int humanSensorType = 36;
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) { // Android 5.1
+                humanSensorType = 27;
+            } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O_MR1) { // Android 8.1
+                humanSensorType = 36;
+            } else if (Build.VERSION.SDK_INT == 30) { // Android 11
+                humanSensorType = 37;
+            }
+            Sensor humanSensor = mSensorManager.getDefaultSensor(humanSensorType);
             if (humanSensor != null) {
                 Log.i(TAG, "humanSensor>>>>");
                 mHumanSensorEventListener = new SensorEventListener() {
