@@ -103,10 +103,16 @@ public class OtherPresenter {
      * 恢复出厂设置
      */
     public void factoryReset() {
-        Intent intent = new Intent("android.intent.action.MASTER_CLEAR");
-        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-        intent.putExtra("android.intent.extra.REASON", "MasterClearConfirm");
-        mContext.sendBroadcast(intent);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+            Intent intent = new Intent("android.intent.action.MASTER_CLEAR");
+            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+            intent.putExtra("android.intent.extra.REASON", "MasterClearConfirm");
+            mContext.sendBroadcast(intent);
+        } else {
+            Intent intent = new Intent("android.intent.action.MASTER_CLEAR");
+            intent.setPackage("android");
+            mContext.sendBroadcast(intent);
+        }
     }
 
     /**
