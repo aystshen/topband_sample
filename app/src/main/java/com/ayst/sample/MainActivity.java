@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.location.Location;
 import android.media.MediaMetadata;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -241,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements
     private GpsPresenter mGpsPresenter;
     private RomUpgradePresenter mRomUpgradePresenter;
 
+    private Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
@@ -266,6 +269,8 @@ public class MainActivity extends AppCompatActivity implements
         mRomUpgradePresenter = new RomUpgradePresenter(this);
 
         initView();
+
+        mHandler = new Handler(getMainLooper());
     }
 
     @Override
@@ -567,6 +572,22 @@ public class MainActivity extends AppCompatActivity implements
                     mOtherPresenter.screenOn();
                 } else {
                     mOtherPresenter.screenOff();
+
+                    mHandler.postDelayed(new Runnable() {
+                        int cnt = 0;
+
+                        @Override
+                        public void run() {
+                            Log.i(TAG, "screen off " + cnt);
+                            cnt++;
+                            if (cnt > 10) {
+                                Log.i(TAG, "screen on ");
+                                mOtherPresenter.screenOn();
+                            } else {
+                                mHandler.postDelayed(this, 1000);
+                            }
+                        }
+                    }, 1000);
                 }
                 break;
             case R.id.btn_fullscreen:

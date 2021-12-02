@@ -2,6 +2,7 @@ package com.ayst.sample.items.other;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -32,7 +33,6 @@ public class OtherPresenter {
     private Context mContext;
     private IOtherView mOtherView;
     private PowerManager mPowerManager;
-    private PowerManager.WakeLock mWakeLock;
     private TextToSpeech mSpeech;
 
     public OtherPresenter(Context context, IOtherView view) {
@@ -121,13 +121,13 @@ public class OtherPresenter {
     public void screenOn() {
         if (null == mPowerManager) {
             mPowerManager = ((PowerManager) mContext.getSystemService(Context.POWER_SERVICE));
-            mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                    | PowerManager.ON_AFTER_RELEASE, "Sample:WakeLock");
         }
-        mWakeLock.acquire();
-
-        Toast.makeText(mContext, "The screen has been turned on!",
-                Toast.LENGTH_SHORT).show();
+        PowerManager.WakeLock wakeLock = mPowerManager.newWakeLock(
+                PowerManager.ACQUIRE_CAUSES_WAKEUP
+                        | PowerManager.SCREEN_DIM_WAKE_LOCK,
+                "Sample:WakeLock");
+        wakeLock.acquire();
+        wakeLock.release();
     }
 
     /**
@@ -135,13 +135,6 @@ public class OtherPresenter {
      * 需要到设置->安全性和位置信息->设备管理应用中勾选Sample应用
      */
     public void screenOff() {
-        if (null == mPowerManager) {
-            mPowerManager = ((PowerManager) mContext.getSystemService(Context.POWER_SERVICE));
-            mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                    | PowerManager.ON_AFTER_RELEASE, "Sample:WakeLock");
-        }
-        mWakeLock.release();
-
         DevicePolicyManager policyManager = (DevicePolicyManager) mContext.getSystemService(Context.DEVICE_POLICY_SERVICE);
         ComponentName adminReceiver = new ComponentName(mContext, AdminReceiver.class);
         boolean admin = policyManager.isAdminActive(adminReceiver);
