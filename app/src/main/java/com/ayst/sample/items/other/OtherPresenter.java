@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.admin.DevicePolicyManager;
+import android.app.backup.BackupManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -228,6 +230,33 @@ public class OtherPresenter {
      */
     public void setTime(long millis) {
         SystemClock.setCurrentTimeMillis(millis);
+    }
+
+    /**
+     * 修改系统语言
+     * @param locale
+     */
+    public void setSystemLanguage(Locale locale) {
+        if (locale != null) {
+            try {
+                Class classActivityManagerNative = Class.forName("android.app.ActivityManagerNative");
+                Method getDefault = classActivityManagerNative.getDeclaredMethod("getDefault");
+                Object objIActivityManager = getDefault.invoke(classActivityManagerNative);
+                Class classIActivityManager = Class.forName("android.app.IActivityManager");
+                Method getConfiguration = classIActivityManager.getDeclaredMethod("getConfiguration");
+                Configuration config = (Configuration) getConfiguration.invoke(objIActivityManager);
+                config.setLocale(locale);
+                Class clzConfig = Class.forName("android.content.res.Configuration");
+                java.lang.reflect.Field userSetLocale = clzConfig.getField("userSetLocale");
+                userSetLocale.set(config, true);
+                Class[] clzParams = {Configuration.class};
+                Method updateConfiguration = classIActivityManager.getDeclaredMethod("updateConfiguration", clzParams);
+                updateConfiguration.invoke(objIActivityManager, config);
+                BackupManager.dataChanged("com.android.providers.settings");
+            } catch (Exception e) {
+                Log.d(TAG, "setSystemLanguage: " + e.getLocalizedMessage());
+            }
+        }
     }
 
     public void tts(String text) {

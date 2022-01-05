@@ -56,6 +56,8 @@ import com.ayst.sample.items.watchdog.WatchdogPresenter;
 import com.ayst.utils.AppUtils;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -220,6 +222,8 @@ public class MainActivity extends AppCompatActivity implements
     Button mUpgradeDeleteBtn;
     @BindView(R.id.btn_tts)
     Button mTtsBtn;
+    @BindView(R.id.btn_language)
+    ToggleButton mLanguageBtn;
 
     private static final int TYPE_POWER_ON = 0;
     private static final int TYPE_POWER_OFF = 1;
@@ -325,6 +329,7 @@ public class MainActivity extends AppCompatActivity implements
         mAutoTimeBtn.setOnCheckedChangeListener(this);
         mAudioPlayBtn.setOnCheckedChangeListener(this);
         mGpsStatusBtn.setOnCheckedChangeListener(this);
+        mLanguageBtn.setOnCheckedChangeListener(this);
 
         mMainBacklightSeekbar.setOnSeekBarChangeListener(this);
         mSubBacklightSeekbar.setOnSeekBarChangeListener(this);
@@ -616,6 +621,13 @@ public class MainActivity extends AppCompatActivity implements
                     mAudioPresenter.play(mAudioStreamSpn.getSelectedItemPosition());
                 } else {
                     mAudioPresenter.stop();
+                }
+                break;
+            case R.id.btn_language:
+                if (b) {
+                    mOtherPresenter.setSystemLanguage(Locale.CHINESE);
+                } else {
+                    mOtherPresenter.setSystemLanguage(Locale.ENGLISH);
                 }
                 break;
         }
