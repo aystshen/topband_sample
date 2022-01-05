@@ -1,6 +1,6 @@
 # Topband Sample
 
-[![](https://img.shields.io/badge/downloads-apk-brightgreen.svg)](http://d.7short.com/1a4h)
+[![](https://img.shields.io/badge/downloads-apk-brightgreen.svg)](https://www.pgyer.com/lU1R)
 
 This sample is used for verification of the topband Android custom feature and includes the following features:
 - Root
@@ -10,7 +10,7 @@ This sample is used for verification of the topband Android custom feature and i
 - Screen on/off
 - Key
 - Full screen
-- Hide/show system bar
+- Hide/show system barCancel changes
 - Camera
 - 4G keep live(AndroidX)
 - Watchdog(AndroidX)
